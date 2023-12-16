@@ -1,0 +1,23 @@
+<html lang="en">
+<head>
+	<%- include("../partials/head.ejs") -%>
+	<title>Users</title>
+	<style>
+		.links { margin-left: 10px; font-size: 20px; }
+		.links a { text-decoration : none; margin: 5px;}
+		#content { margin-left:0px;  font-size: 35px}
+	</style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+	<%- include("../partials/header.ejs") -%>
+	<div id="content" class="container">
+		Users Page
+		<div class="links">
+			<a href="signin/">Sign in </a>
+			<a href="signup/"> Sign up </a>
+		</div>
+	</div>
+	
+	<%- include("../partials/footer.ejs") -%>
+</body>
+</html>

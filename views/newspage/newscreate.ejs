@@ -1,0 +1,24 @@
+<html lang="en">
+<head>
+	<%- include("../partials/head.ejs") -%>
+	<title> Nodesite </title>
+</head>
+<style> form {margin: 50px;} </style>
+<body>	
+	<%- include("../partials/head.ejs") -%>
+	<p> Create your own article </p>
+	<form type='form' method="POST">
+		<div class="mb-3">
+		  <label for="exampleFormControlInput1" class="form-label">Name</label>
+		  <input type="text" class="form-control" id="exampleFormControlInput1" required>
+		</div>
+		<div class="mb-3">
+		  <label for="exampleFormControlTextarea1" class="form-label">Text</label>
+		  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
+		</div>
+		<button type="submit"  class="btn btn-primary btn-lg"> Submit </button>
+	</form>
+
+	<%- include("../partials/head.ejs") -%>
+</body>
+</html>
