@@ -2,11 +2,44 @@
 <head>
 	<%- include("../partials/head.ejs") -%>
 	<title>Sign up</title>
+	<style>
+		form { margin: 50px ; }
+	</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
 	<%- include("../partials/header.ejs") -%>	
+	<%- include("../partials/successMessage.ejs") -%>	
+
 	<div class="container">
-		Register
+		<form class="justify-content-center" method="POST">
+		  <div class="col">
+		    <label for="validationServer01" class="form-label">First name</label>
+		    <input type="text" class="form-control is-valid" id="validationServer01" value="Mark" required name='name'>
+		    <div class="valid-feedback"></div>
+		  </div>
+		  <div class="col">
+		    <label for="validationServer02" class="form-label">Last name</label>
+		    <input type="text" class="form-control is-valid" id="validationServer02" value="Otto" required name='surname'>
+		    <div class="valid-feedback"></div>
+		  </div>
+		  <div class="col">
+		    <label for="validationServer03" class="form-label">Email</label>
+		    <input type="email" class="form-control" id="validationServer03" aria-describedby="validationServer03Feedback" required name='email'>
+		    <div id="validationServer03Feedback" class="invalid-feedback">
+		      Please provide a valid email.
+		    </div>
+		  </div>
+		<div class="mb-3">
+	      <label for="password" class="form-label">Password</label>
+	      <input type="password" class="form-control" id="password" placeholder="Enter your password" required minlength="5" maxlength="15" name='password'>
+	    </div>
+	    <div id="validationServer03Feedback" class="invalid-feedback">
+	        Password must be at least 5-15 characters long.
+	      </div>
+	      <div class="col text-center">
+		    <button class="btn btn-primary" type="submit">Submit form</button>
+		  </div>
+		</form>
 	</div>
 	<%- include("../partials/footer.ejs") -%>
 </body>

@@ -6,14 +6,9 @@
 <style> form {margin: 50px;} </style>
 <body>	
 	<%- include("../partials/header.ejs") -%>
+	<%- include("../partials/successMessage.ejs") -%>	
 
-	<div id="successMessage" class="alert alert-success shadow" role="alert" style="border-left:#155724 5px solid; border-radius: 0px; display:none;" >
-		<div class="row">
-		  	<p style="font-size:18px" class="mb-0 font-weight-light"><b class="mr-1">Success!</b>This example text in a custom alert.</p>
-		</div>
-	</div>
-
-	<p> Create your own article </p>
+	<p id='titleForm'> Create your own article </p>
 
 	<form onsubmit="showSuccess()" method="POST">
 		<div class="mb-3">
@@ -27,13 +22,6 @@
 		<button type="submit" onclick="" class="btn btn-primary btn-lg"> Submit </button>
 	</form>
 
-	<script>
-		function showSuccess(argument) {
-			let successMessage = document.querySelector("#successMessage");
-			successMessage.style.display = "flex";
-		}
-		
-	</script>
 	<%- include("../partials/footer.ejs") -%>
 </body>
 </html>

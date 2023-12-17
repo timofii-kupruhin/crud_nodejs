@@ -1,0 +1,9 @@
+.newsdata { 
+	display: inline-block;
+	justify-content: ;
+	margin-left: 100px;
+}
+#createArticle { font-size: 30px; }
+a {
+	text-decoration: none;
+} 

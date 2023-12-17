@@ -1,12 +1,14 @@
 const express = require("express")
 const mongoose = require("mongoose")
 require('dotenv').config()
-
+// routes 
 const newsRouter = require("./routes/news.js")
 const usersRouter = require("./routes/users.js")
+// models 
+const ArticleModel = require("./models/articleModel.js")
 
 const app = express()
-const PORT = 3000 || 8080
+const PORT = process.env.PORT
 
 app.set("view engine", 'ejs')
 // views
@@ -15,7 +17,7 @@ app.set("views", './views')
 app.use(express.static("public"))
 
 // encoding 
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 // routes 
@@ -29,10 +31,14 @@ app.get("/" ,(req, resp) => {
 app.get("/users", (req, resp) => {
 	resp.render("userspage/userspage")
 })
-let articles_data = [{name: "Test", text: "bla bla"}, {name: "Test", text: "bla bla"}]
 
-app.get("/news", (req, resp) => {
-	resp.render("newspage/newspage", {articles: articles_data} )
+
+app.get("/news", async (req, resp) => {
+	async function get_articles_data() {
+		let articles_data = await ArticleModel.find({})
+		return articles_data
+	}
+	resp.render("newspage/newspage", {articles: await get_articles_data()} )
 })
 
 async function main() {
@@ -46,4 +52,4 @@ async function main() {
 
 main()
 
-module.exports = []
+module.exports = {}

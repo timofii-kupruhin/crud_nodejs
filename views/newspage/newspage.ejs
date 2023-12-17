@@ -2,19 +2,19 @@
 <head>
 	<%- include("../partials/head.ejs") -%>
 	<title>News</title>
+	<link href="newsPage.css" rel="stylesheet" />
 </head>
 <body>
 	<%- include("../partials/header.ejs") -%>
-	<div class="container">
-		News Page
-		<!-- <div class="newsdata">
-			<% articles.forEach((article) => { %>
-				<%= article.name %>
-				<%= article.text %> 
-			<% }) %>
-		</div> -->
-		<p><a href="/news/create/"> Create your own article</a></p>
-	</div>
+		<p id='createArticle'><a href="/news/create/"> Create your own article</a></p>
+
+		<div class="newsdata">
+		<% articles.forEach((article) => { %>	
+	      <h4 class="text-primary"><%= article.title %></h4>
+	      <a href="#">Read now -> </a></p>
+  		<% }) %>
+		</div>
+
 
 	<%- include("../partials/footer.ejs") -%>
 </body>
