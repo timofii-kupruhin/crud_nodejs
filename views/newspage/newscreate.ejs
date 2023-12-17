@@ -5,20 +5,35 @@
 </head>
 <style> form {margin: 50px;} </style>
 <body>	
-	<%- include("../partials/head.ejs") -%>
+	<%- include("../partials/header.ejs") -%>
+
+	<div id="successMessage" class="alert alert-success shadow" role="alert" style="border-left:#155724 5px solid; border-radius: 0px; display:none;" >
+		<div class="row">
+		  	<p style="font-size:18px" class="mb-0 font-weight-light"><b class="mr-1">Success!</b>This example text in a custom alert.</p>
+		</div>
+	</div>
+
 	<p> Create your own article </p>
-	<form type='form' method="POST">
+
+	<form onsubmit="showSuccess()" method="POST">
 		<div class="mb-3">
 		  <label for="exampleFormControlInput1" class="form-label">Name</label>
-		  <input type="text" class="form-control" id="exampleFormControlInput1" required>
+		  <input type="text" class="form-control" id="exampleFormControlInput1" required name='title'>
 		</div>
 		<div class="mb-3">
 		  <label for="exampleFormControlTextarea1" class="form-label">Text</label>
-		  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" required></textarea>
+		  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" required name='text'></textarea>
 		</div>
-		<button type="submit"  class="btn btn-primary btn-lg"> Submit </button>
+		<button type="submit" onclick="" class="btn btn-primary btn-lg"> Submit </button>
 	</form>
 
-	<%- include("../partials/head.ejs") -%>
+	<script>
+		function showSuccess(argument) {
+			let successMessage = document.querySelector("#successMessage");
+			successMessage.style.display = "flex";
+		}
+		
+	</script>
+	<%- include("../partials/footer.ejs") -%>
 </body>
 </html>

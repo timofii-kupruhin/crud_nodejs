@@ -1,16 +1,15 @@
 const express = require("express")
 const router = express.Router()
+const sleep = (ms = 0) => new Promise(resolve => setTimeout(resolve, ms));
 
-router.route("/create")
-	.get((req, resp) => {
-		resp.render('newspage/newscreate')
-	})
+router.get("/create", (req, resp) => {
+	resp.render('newspage/newscreate')
+})
 
-router.post("/create", (req, resp) => {
-		console.log(req.body)
-		// next()
-		console.log('1213123')
-
-	})
+router.post("/create", async (req, resp) => {
+	console.log(req.body)
+	await sleep(2000)
+	resp.redirect("/news")
+})
 
 module.exports = [router]

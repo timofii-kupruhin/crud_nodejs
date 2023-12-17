@@ -1,22 +1,26 @@
 const express = require("express")
-const bodyParser = require('body-parser');
+const mongoose = require("mongoose")
+require('dotenv').config()
+
 const newsRouter = require("./routes/news.js")
 const usersRouter = require("./routes/users.js")
-const multer  = require('multer')
-const upload = multer()
 
 const app = express()
-const PORT = 3000
+const PORT = 3000 || 8080
 
 app.set("view engine", 'ejs')
+// views
 app.set("views", './views')
-
-app.use(upload.array()); 
+// static files
 app.use(express.static("public"))
+
+// encoding 
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
+
+// routes 
 app.use("/news", newsRouter)
 app.use("/users", usersRouter)
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
 
 app.get("/" ,(req, resp) => {
 	resp.render("mainpage/mainpage")
@@ -31,8 +35,15 @@ app.get("/news", (req, resp) => {
 	resp.render("newspage/newspage", {articles: articles_data} )
 })
 
-app.listen(PORT, () => {
-	console.log("Server has been started.. ")
-})
+async function main() {
+	try {
+		await mongoose.connect(`mongodb+srv://${process.env.mongoUser}:${process.env.mongoPassword}@nodemongo.e9qyvvb.mongodb.net/?retryWrites=true&w=majority`);
+		app.listen(PORT) 
+		console.log("Server has been started.. ")
+	}
+	catch(err) { return console.log(err); }
+}
+
+main()
 
 module.exports = []
