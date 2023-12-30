@@ -1,11 +1,20 @@
 const express = require("express")
 const mongoose = require("mongoose")
+const cors = require("cors")
+const session = require('express-session');
+const cookies = require("cookie-parser")
+
 require('dotenv').config()
 // routes 
+const mainRouter = express.Router()
 const newsRouter = require("./routes/news.js")
 const usersRouter = require("./routes/users.js")
 // models 
 const ArticleModel = require("./models/articleModel.js")
+const UserModel = require("./models/usersModels.js")
+
+//middleware
+const { isLoggedIn } = require("./utils/middleware.js")
 
 const app = express()
 const PORT = process.env.PORT
@@ -20,30 +29,27 @@ app.use(express.static("public"))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
+app.use(cors());
+app.use(cookies())
+
 // routes 
 app.use("/news", newsRouter)
 app.use("/users", usersRouter)
+app.use("/", mainRouter)
 
-app.get("/" ,(req, resp) => {
-	resp.render("mainpage/mainpage")
-})
-
-app.get("/users", (req, resp) => {
-	resp.render("userspage/userspage")
-})
-
-
-app.get("/news", async (req, resp) => {
-	async function get_articles_data() {
-		let articles_data = await ArticleModel.find({})
-		return articles_data
-	}
-	resp.render("newspage/newspage", {articles: await get_articles_data()} )
+mainRouter.get("/", isLoggedIn, async (req, resp) => {
+	const is_authorized = req.user == undefined ? false : true 
+	let data = {auth: is_authorized}
+	if (is_authorized) { 
+		const user = await UserModel.findOne( { _id: req.user.user_id } )
+		data = {auth: is_authorized, user: user}
+	} 
+	resp.render("mainpage/mainpage", data)
 })
 
 async function main() {
 	try {
-		await mongoose.connect(`mongodb+srv://${process.env.mongoUser}:${process.env.mongoPassword}@nodemongo.e9qyvvb.mongodb.net/?retryWrites=true&w=majority`);
+		await mongoose.connect(`${process.env.DB_URL}`);
 		app.listen(PORT) 
 		console.log("Server has been started.. ")
 	}

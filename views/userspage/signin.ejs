@@ -5,33 +5,44 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 	<%- include("../partials/header.ejs") -%>	
-	
-	<% if (error == '400') { %>
-		<%- include("../partials/error400.ejs") -%>
+	<!-- <script> 
+		function change_text(error) {
+			let error_label = document.querySelector("#error");
+			if (error == "400")
+				error_label.innerHTML = "User already exists!! Try to log in !";
+			if (error == "404")
+				error_label.innerHTML = "User not found! Check your email! ";
+			if (error == "password_incorrect")
+				error_label.innerHTML = "Your password is incorrect !!!"; }
+	</script> -->
+	<% /* %>
+	<% if (error) { %>
+		<%- include("../partials/error.ejs") -%>
+		<% if (error === "400") { %> <script> change_text("400"); </script> <% } %>
+		<% if (error === "404") { %> <script> change_text("404"); </script> <% } %>
+		<% if (error === "password_incorrect") { %> <script> change_text("password_incorrect"); </script> <% } %>
 	<% } %>
-
-	<% if (error == "404") { %>
-		<%- include("../partials/error404.ejs") -%>
-	<% } %>
-	
+	<% */ %>
 	<div class="container">
-		Log in
+		<br>
+		<h3>Log in</h3>
 		<div class="container mt-5">
 	  <form method="POST">
 	    <div class="mb-3">
 	      <label for="email" class="form-label">Email address</label>
-	      <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+	      <input type="email" class="form-control" id="email" placeholder="Enter your email" name="email" required>
 	    </div>
 
 	    <div class="mb-3">
 	      <label for="password" class="form-label">Password</label>
-	      <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+	      <input type="password" class="form-control" id="password" placeholder="Enter your password" name="password" required>
 	    </div>
 
 	    <button type="submit" class="btn btn-primary">Login</button>
 	  </form>
 	</div>
 	</div>
-	<%- include("../partials/footer.ejs") -%>
+
+	<%- include("../partials/footer.ejs") -%>	
 </body>
 </html>

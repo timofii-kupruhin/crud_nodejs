@@ -6,7 +6,11 @@
 <body class="d-flex flex-column min-vh-100">
 	<%- include("../partials/header.ejs") -%>	
 	<div class="container">
-		Mainpage
+	<% if (auth) { %>
+		<h1 style="margin-top: 5px"> Hello <%= user.name %> </h1>
+	<% } else { %>
+		<h3>Mainpage </h3>
+	<% }%>  
 	</div>
 	<%- include("../partials/footer.ejs") -%>
 </body>

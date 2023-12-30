@@ -3,11 +3,17 @@
     <a class="navbar-brand" href="/">Home</a>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
+        <% if (auth) { %>
         <a class="nav-link" href="/users/">Your profile</a>
+        <% } %>
+        <% if (!auth) { %>
         <a class="nav-link" href="/users/signin/">Sign in</a>
         <a class="nav-link" href="/users/signup/">Sign up</a>
+        <% } %> 
         <a class="nav-link" href="/news/">News</a>
-
+        <% if (auth) { %>
+        <a class="nav-link" href="/users/logout/">Logout</a>
+        <% } %>
       </div>
     </div>
   </div>
