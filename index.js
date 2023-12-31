@@ -22,8 +22,6 @@ const PORT = process.env.PORT
 app.set("view engine", 'ejs')
 // views
 app.set("views", './views')
-// static files
-app.use(express.static("public"))
 
 // encoding 
 app.use(express.urlencoded({ extended: true }))

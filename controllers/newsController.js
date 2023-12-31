@@ -1,34 +1,51 @@
 const express = require("express")
 const mongoose = require("mongoose")
-const ArticleModel = require("../models/articleModel.js")
+const NewsServices = require("../services/newsServices.js")
+const UserServices = require("../services/userServices.js")
 
 class NewsController {
 	//  ------------------- POST REQUESTS -------------------
 		
 	async createArticle (req, resp) { 
 		const {title, text} = req.body
-		const article = await ArticleModel.create({title: title, text: text})
-		await article.save()
-		resp.redirect("/news")
+		const authorData = await UserServices.getUserById(req.user.user_id)
+		
+		NewsServices.createArticle(title, text, `${authorData.name} ${authorData.surname}`)
+		return resp.redirect(`/news/`)
 	}
 
 	//  ------------------- GET REQUESTS -------------------
 	async getNewsCreationPage (req, resp) {
 		const is_authorized = req.user == undefined ? false : true 
 		if (is_authorized) { 
-			resp.render("newspage/newscreate", {auth: is_authorized})
+			return resp.render("newspage/newscreate", {auth: is_authorized})
 		} else { 
-			resp.redirect('/users/signin/') 
+			return resp.redirect('/users/signin/') 
 		}
 	}
-	async getNewsPage (req, resp) { 
+
+	async getArticlePage(req, resp) { 
+		const articleId = req.params.id
 		const is_authorized = req.user == undefined ? false : true 
 
-		async function get_articles_data() {
-			let articles_data = await ArticleModel.find({})
-			return articles_data
+		if ( mongoose.Types.ObjectId.isValid(articleId) ) {
+			const data = {
+				auth : is_authorized, 
+				article: await NewsServices.getOneArticle(articleId)
+			}
+			return resp.render("newsPage/articlePage", data)
+		} else { 
+			return resp.redirect("/")
 		}
-		resp.render("newspage/newspage", { auth: is_authorized, articles: await get_articles_data(),} )
+	}
+	
+	async getNewsPage (req, resp) { 
+		const is_authorized = req.user == undefined ? false : true 
+		const data = { 
+			auth: is_authorized, 
+			articles: await NewsServices.getArticles()
+		}
+		return resp.render("newspage/newspage",  data )
 	}
 }
 

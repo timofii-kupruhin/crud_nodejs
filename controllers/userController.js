@@ -18,7 +18,7 @@ class UserController {
 	      resp.cookie("token_auth", token, { 
 	     		httpOnly: true, 
 	     		secure: true,
-	     		maxAge: 60*1000*3600
+	     		maxAge: 60*1000*60
 	      })
 	      return resp.redirect("/users/")
 	    
@@ -46,7 +46,7 @@ class UserController {
 			})
 
 			const user = await doc.save()
-			resp.json(user);
+			resp.redirect('/users/signin/')
 		}
 	}
 
@@ -67,9 +67,9 @@ class UserController {
 	}
 	async getUsersPage(req, resp) { 
 		const is_authorized = req.user == undefined ? false : true 
-
 		resp.render("userspage/userspage",  {auth : is_authorized})
 	}
+
 	async logout (req, resp) {
 		await resp.clearCookie("token_auth")
 		resp.redirect('/'); resp.end()

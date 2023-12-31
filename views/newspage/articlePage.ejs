@@ -1,0 +1,14 @@
+<html lang="en">
+<head>
+	<%- include("../partials/head.ejs") -%>
+	<title> <%= article.title %> </title>
+</head>
+<body>	
+	<%- include("../partials/header.ejs") -%>
+	<%= article.title %> <br>
+	<%= article.text %> <br>
+	<%= article.date %> <br>
+	<%= article.author %>
+	<%- include("../partials/footer.ejs") -%>
+</body>
+</html>

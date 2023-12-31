@@ -5,24 +5,15 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 	<%- include("../partials/header.ejs") -%>	
-	<!-- <script> 
-		function change_text(error) {
-			let error_label = document.querySelector("#error");
-			if (error == "400")
-				error_label.innerHTML = "User already exists!! Try to log in !";
-			if (error == "404")
-				error_label.innerHTML = "User not found! Check your email! ";
-			if (error == "password_incorrect")
-				error_label.innerHTML = "Your password is incorrect !!!"; }
-	</script> -->
-	<% /* %>
-	<% if (error) { %>
-		<%- include("../partials/error.ejs") -%>
-		<% if (error === "400") { %> <script> change_text("400"); </script> <% } %>
-		<% if (error === "404") { %> <script> change_text("404"); </script> <% } %>
-		<% if (error === "password_incorrect") { %> <script> change_text("password_incorrect"); </script> <% } %>
-	<% } %>
-	<% */ %>
+	<% if (auth) { %>
+		<div id="error-wrapper" class='flex justify-content-center'></div>
+		<%- include("../partials/error.ejs") -%>	
+		<a href="/users/logout/" class="h2"> Log out </a>
+		<script>
+			let errorText = document.querySelector("#error")
+			errorText.innerHTML = "You have already logged in, log out firstly if you want to sign in an another account"
+		</script>
+	<% } else { %>
 	<div class="container">
 		<br>
 		<h3>Log in</h3>
@@ -42,7 +33,7 @@
 	  </form>
 	</div>
 	</div>
-
+	<% } %>
 	<%- include("../partials/footer.ejs") -%>	
 </body>
 </html>

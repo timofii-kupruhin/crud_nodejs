@@ -5,9 +5,12 @@ const { isLoggedIn } = require("../utils/middleware")
 
 router.route("/create")
 	.get(isLoggedIn, NewsController.getNewsCreationPage)
-	.post(NewsController.createArticle)
+	.post(isLoggedIn, NewsController.createArticle)
 
 router.route("/")
-	.get(NewsController.getNewsPage)
+	.get(isLoggedIn, NewsController.getNewsPage)
+
+router.route("/:id")
+	.get(isLoggedIn, NewsController.getArticlePage)
   
 module.exports = [router]

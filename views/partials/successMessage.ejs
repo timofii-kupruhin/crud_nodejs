@@ -4,8 +4,12 @@
 	</div>
 </div>
 <script>
-	function showSuccess(argument) {
+	async function showSuccess(argument) {
 	let successMessage = document.querySelector("#successMessage");
+	const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 	successMessage.style.display = "flex";
+	await sleep(1500)	
+	successMessage.style.display = "none";
+
 }
 </script>
