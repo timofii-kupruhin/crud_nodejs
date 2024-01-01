@@ -3,18 +3,45 @@
 	<%- include("../partials/head.ejs") -%>
 	<title>News</title>
 	<link href="newsPage.css" rel="stylesheet" />
+	<style>
+		#hui { 
+			margin-left: 15px;
+			margin-right: 15px;
+			padding:5px; }
+		.card {
+			margin-right: 15px;
+			margin-left: 25px;
+			margin-bottom: 5px;
+			margin-top:25px;
+			width: 400px;
+			height: 500px;
+		}
+		a { text-decoration: none; }
+	</style>
 </head>
 <body>
 	<%- include("../partials/header.ejs") -%>
-		<p id='createArticle'><a href="/news/create/"> Create your own article</a></p>
-
-		<div class="newsdata">
+	<% if (auth) { %>
+	<p id='createArticle' class="h2 m-4"><a href="/news/create/"> Create your own article</a></p>
+	<% } %> 
+	<div class="container-grid">
+	  <div class="row" id='hui'>
 		<% articles.forEach((article) => { %>	
-	      <h4 class="text-primary"><%= article.title %></h4>
-	      <a href="<%= article._id %>">Read now -> </a></p>
-  		<% }) %>
-		</div>
-
+	    <div class="card col-md-2">
+	      <img src="https://via.placeholder.com/400x200" class="card-img-top" alt="Заглушка">
+	      <div class="card-body">
+	        <h5 class="card-title"><%= article.title %></h5>
+	      </div>
+	      <ul class="list-group list-group-flush">
+	        <li class="list-group-item"><small class="text-muted">Дата: <%= article.date %></small></li>
+	        <li class="list-group-item"><small class="text-muted">Автор: <%= article.authorName %></small></li>
+		    <li class="list-group-item h3"><a href="<%= article._id %>"> Read now </a></p></li>
+	      </ul>
+	    </div>
+		<% }) %>
+	  </div>
+	  </div>
+	</div>
 
 	<%- include("../partials/footer.ejs") -%>
 </body>

@@ -2,13 +2,33 @@
 <head>
 	<%- include("../partials/head.ejs") -%>
 	<title> <%= article.title %> </title>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    a { text-decoration: none; color: white; }
+    a:hover { color: white; }
+  </style>
 </head>
 <body>	
 	<%- include("../partials/header.ejs") -%>
-	<%= article.title %> <br>
-	<%= article.text %> <br>
-	<%= article.date %> <br>
-	<%= article.author %>
-	<%- include("../partials/footer.ejs") -%>
+	<div class="container mt-5">
+	  <div class="card">
+	    <img src="https://via.placeholder.com/800x400" class="card-img-top" alt="Заглушка">
+	    <div class="card-body">
+	      <h5 class="card-title" id="outputTitle"><%= article.title %> </h5>
+	      <p class="card-text" id="outputText"><%= article.text %></p>
+	    </div>
+	    <ul class="list-group list-group-flush">
+	      <li class="list-group-item"><small class="text-muted" id="outputDate"><%= article.date %></small></li>
+	      <li class="list-group-item" id="outputAuthor">Автор: <%= article.authorName %></li>
+	    </ul>
+	  </div>
+	  <% if (auth && article.authorId == userData._id ) { %>
+	<button type="button" class="btn btn-primary mt-3 flex md-3"><a href="/news/<%= article._id %>/update"> Обновить </a> </button>
+	<% } %>
+	</div>
+<%- include("../partials/footer.ejs") -%>
+
 </body>
 </html>

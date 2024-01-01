@@ -8,6 +8,7 @@ const UserModelSchema = new Schema({
   password: {type: String, min: 5, max: 15, required: true}, 
   email : {type: mongoose.SchemaTypes.Email, allowBlank: false, required: true},
   date: { type: Date, default: Date.now() },
+  articles:  {type: [String], allowBlank: true },
   is_admin: { type: Boolean, default: false }
 });
  

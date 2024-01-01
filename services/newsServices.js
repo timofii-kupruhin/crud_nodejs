@@ -12,15 +12,21 @@ class NewsServices {
 		return article_data 
 	}
 
-	async createArticle (title, text, author) { 
+	async createArticle (title, text, authorName, authorId) { 
 		const article = await ArticleModel.create(
 		{ 
 			title: title, 
 			text: text,
-			author: author
+			authorName: authorName,
+			authorId: authorId
 		})
-		await article.save()
+		const savedArticle = await article.save()
+		return savedArticle
 	}
 	
+	async updateArticle (articleId, articleData) { 
+		const updatedArticle = await ArticleModel.findOneAndUpdate({ _id: articleId}, articleData);
+	}
+
 }
 module.exports = new NewsServices()

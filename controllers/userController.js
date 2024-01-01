@@ -3,6 +3,7 @@ const UserModel = require("../models/usersModels")
 const mongoose = require("mongoose")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+const UserServices = require("../services/userServices.js")
 require('dotenv').config()
 
 class UserController { 
@@ -67,9 +68,15 @@ class UserController {
 	}
 	async getUsersPage(req, resp) { 
 		const is_authorized = req.user == undefined ? false : true 
-		resp.render("userspage/userspage",  {auth : is_authorized})
+		let data = { auth: is_authorized }
+		if (is_authorized) {
+			const userData = await UserServices.getUserById(req.user.user_id)
+			data["userData"] = userData
+			return resp.render("userspage/userspage", data )
+		} else {
+			return resp.redirect("/users/signin")
+		}
 	}
-
 	async logout (req, resp) {
 		await resp.clearCookie("token_auth")
 		resp.redirect('/'); resp.end()
@@ -77,4 +84,4 @@ class UserController {
 	
 }
 
-module.exports = new UserController(2)
+module.exports = new UserController()

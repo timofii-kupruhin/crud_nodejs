@@ -3,21 +3,49 @@
 	<%- include("../partials/head.ejs") -%>
 	<title>Users</title>
 	<style>
-		.links { margin-left: 10px; font-size: 20px; }
-		.links a { text-decoration : none; margin: 5px;}
-		#content { margin-left:0px;  font-size: 35px}
+	.links { margin-left: 10px; font-size: 20px; }
+	.links a { text-decoration : none; margin: 5px;}
+	#content { margin-left:0px;  font-size: 35px}
+    body {
+      background-color: #f8f9fa;
+    }
+    .profile-container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+    }
+    .profile-label {
+      font-weight: bold;
+    }
 	</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
 	<%- include("../partials/header.ejs") -%>
-	<div id="content" class="container">
-		Your profile
-		<!-- <div class="links">
-			<a href="signin/">Sign in </a>
-			<a href="signup/"> Sign up </a>
-		</div> -->
-	</div>
+	<% if (auth) { %>
 	
+	<div class="container">
+	  <div class="profile-container">
+	    <h2>Профиль</h2>
+	    <div id="userProfile">
+	      <p class="profile-label" id="email">Почта: <%= userData.email %></p>
+	      <p class="profile-label" id="name">Имя: <%= userData.name %></p>
+	      <p class="profile-label" id="surname">Фамилия: <%= userData.surname %></p>
+	      <p class="profile-label" id="date">Дата регистрации: <%= userData.date %></p>
+		    <p class="h5">Ваши статьи: </p>
+		    <% userData.articles.forEach((article) => { %>
+		  		<p><a href="/news/<%= article %>"> Статья </a></p>
+		  	<% }) %>
+	    </div>
+	  </div>
+	</div>
+
+	<% } else { %>
+		<p> Error </p>
+	<% } %> 
+
 	<%- include("../partials/footer.ejs") -%>
 </body>
 </html>

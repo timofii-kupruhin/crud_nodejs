@@ -12,5 +12,9 @@ router.route("/")
 
 router.route("/:id")
 	.get(isLoggedIn, NewsController.getArticlePage)
-  
+ 
+router.route("/:id/update")
+	.get(isLoggedIn, NewsController.getUpdateArticlePage)
+	.post(isLoggedIn, NewsController.updateArticle) 
+
 module.exports = [router]
