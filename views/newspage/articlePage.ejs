@@ -7,7 +7,22 @@
       background-color: #f8f9fa;
     }
     a { text-decoration: none; color: white; }
-    a:hover { color: white; }
+    a:hover .navbar-brand:hover { color: white; }
+    .navbar-brand { color: blue}
+    .comment-info {
+	  color: #555;
+	  font-size: 14px;
+	  margin-bottom: 5px;
+	}
+	.comment-text {
+	  font-size: 20px;
+	}
+	.custom-hr {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      border: 0;
+      border-top: 2px solid #ddd; /* Цвет линии */
+    }
   </style>
 </head>
 <body>	
@@ -25,10 +40,48 @@
 	    </ul>
 	  </div>
 	  <% if (auth && article.authorId == userData._id ) { %>
-	<button type="button" class="btn btn-primary mt-3 flex md-3"><a href="/news/<%= article._id %>/update"> Обновить </a> </button>
-	<% } %>
+	  <div class="container-grid">
+		<form method="POST" action="/news/<%= article._id %>/delete">
+			<button type="button" class="btn btn-primary mt-3 col-md-2 md-3"><a href="/news/<%= article._id %>/update"> Обновить </a> </button>
+			<button type="submit" class="btn btn-primary mt-3 col-md-2 md-3"> Удалить </button>
+		</form>
+	  <% } %>
+	  </div>
 	</div>
-<%- include("../partials/footer.ejs") -%>
+	<br><hr class="custom-hr">
+  	<h5 class="card-title ms-5 h3">Комментарии</h5>
+	<ul class="list-group mt-3">
+	  <% comments.forEach((comment) => { %>
+	    <li class="list-group-item">
+	      <div class="comment-info">
+	        <div class="comment-label h5"><strong ><%= comment.author %></strong> (<%= comment.date %>)</div>
+	      </div>
+	      <p class="comment-text"><%= comment.text %></p>
+	    </li>
+		<br>
+	  <% }) %>
+	</ul>
+
+	<% if (auth) { %>
+	  <div class="card">
+	    <div class="card-body">
+	      <form method="POST" action="/news/<%= article._id %>/comment">
+	        <div class="mb-3">
+	          <label for="commentText" class="form-label">Оставьте ваш комментарий:</label>
+	          <textarea class="form-control" id="commentText" rows="5" cols="5" required name="text" max="200" style="resize:none"></textarea>
+	        </div>
+	        <button type="submit" class="btn btn-primary">Добавить комментарий</button>
+	      </form>
+	    </div>
+	  </div>
+	<% } else { %>
+		<div class="flex">
+			<p class="h4 text-center"> Авторизуйтесь, чтоб оставлять коментарии </p>
+		</div>
+	<% } %>
+	<br>
+
+	<%- include("../partials/footer.ejs") -%>
 
 </body>
 </html>

@@ -4,6 +4,7 @@ const cors = require("cors")
 const session = require('express-session');
 const cookies = require("cookie-parser")
 const methodOverride = require("method-override")
+const multer = require("multer")
 // enviroment variables
 require('dotenv').config()
 

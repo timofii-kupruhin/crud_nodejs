@@ -72,7 +72,10 @@ class UserController {
 		if (is_authorized) {
 			const userData = await UserServices.getUserById(req.user.user_id)
 			data["userData"] = userData
+			if (userData["articles"] != null) 
+				userData["articles"] == undefined
 			return resp.render("userspage/userspage", data )
+
 		} else {
 			return resp.redirect("/users/signin")
 		}

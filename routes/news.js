@@ -17,4 +17,10 @@ router.route("/:id/update")
 	.get(isLoggedIn, NewsController.getUpdateArticlePage)
 	.post(isLoggedIn, NewsController.updateArticle) 
 
+router.route("/:id/delete")
+	.post(isLoggedIn, NewsController.deleteArticle) 
+
+router.route("/:id/comment")
+	.post(isLoggedIn, NewsController.leaveComment) 
+
 module.exports = [router]

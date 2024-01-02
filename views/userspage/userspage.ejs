@@ -35,9 +35,13 @@
 	      <p class="profile-label" id="surname">Фамилия: <%= userData.surname %></p>
 	      <p class="profile-label" id="date">Дата регистрации: <%= userData.date %></p>
 		    <p class="h5">Ваши статьи: </p>
-		    <% userData.articles.forEach((article) => { %>
-		  		<p><a href="/news/<%= article %>"> Статья </a></p>
-		  	<% }) %>
+		    <% if (userData.articles == undefined) { %>
+		    	<p class="h5"> Пока нету </p>
+		    <% } else { %>
+			    <% userData.articles.forEach((article) => { %>
+			  		<p><a href="/news/<%= article %>"> Статья </a></p>
+			  	<% }) %>
+		  	<% } %>
 	    </div>
 	  </div>
 	</div>
