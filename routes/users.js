@@ -12,8 +12,19 @@ router.route("/signin", )
 	.post(UserController.login)
 
 router.route("/logout", ).get(UserController.logout)
-router.route("/update", ).post(UserController.update)
 
-router.route("/").get(isLoggedIn, UserController.getUsersPage)
+router.route("/update", )
+	.get(isLoggedIn, UserController.getUserUpdatePage)
+	.post(isLoggedIn, UserController.updateUser)
+
+router.route("/changePassword", )
+	.get(isLoggedIn, UserController.getChangePasswordPage)
+	.post(isLoggedIn, UserController.changePassword)
+
+router.route("/delete", )
+	.post(isLoggedIn, UserController.deleteUser)
+
+router.route("/")
+	.get(isLoggedIn, UserController.getUsersPage)
 
 module.exports = [router]

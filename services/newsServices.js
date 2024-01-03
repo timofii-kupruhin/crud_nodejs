@@ -4,8 +4,13 @@ const UserServices = require("../services/userServices.js")
 
 class NewsServices { 
 	async getArticles() {
-		let articles_data = await ArticleModel.find({})
-		return articles_data 
+		let articlesData = await ArticleModel.find({})
+		return articlesData 
+	}
+	
+	async getUsersArticles(userId) {
+		let articlesData = await ArticleModel.find({authorId: `${userId}`})
+		return articlesData 
 	}
 
 	async getOneArticle(articleId) {
@@ -60,6 +65,10 @@ class NewsServices {
 		const deletedArticle = await ArticleModel.deleteOne({ _id: articleId});
 	}
 	
+	async deleteManyArticleByAuthor (userId) { 
+		const deletedArticles = await ArticleModel.deleteMany({ authorId: `${userId}`})
+		return deletedArticles
+	}
 
 }
 module.exports = new NewsServices()

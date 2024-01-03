@@ -5,6 +5,8 @@
 	<style>
 	.links { margin-left: 10px; font-size: 20px; }
 	.links a { text-decoration : none; margin: 5px;}
+	.articles-wrapper a {text-decoration : none; color: white;}
+	.articles-wrapper a:hover{ color: white;}
 	#content { margin-left:0px;  font-size: 35px}
     body {
       background-color: #f8f9fa;
@@ -20,6 +22,7 @@
     .profile-label {
       font-weight: bold;
     }
+    #article-link { padding-left: 15px; margin-left: 50%;}
 	</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -35,14 +38,21 @@
 	      <p class="profile-label" id="surname">Фамилия: <%= userData.surname %></p>
 	      <p class="profile-label" id="date">Дата регистрации: <%= userData.date %></p>
 		    <p class="h5">Ваши статьи: </p>
-		    <% if (userData.articles == undefined) { %>
-		    	<p class="h5"> Пока нету </p>
-		    <% } else { %>
-			    <% userData.articles.forEach((article) => { %>
-			  		<p><a href="/news/<%= article %>"> Статья </a></p>
-			  	<% }) %>
-		  	<% } %>
+		    <div class="articles-wrapper">
+			    <% if (userData.articles.length == 0) { %>
+			    	<p class="h6"> Пока нету </p>
+			    <% } else { %>
+				    <% userData.articles.forEach((article) => { %>
+				  		<p><%= article.title %>  <button type='button' class="btn btn-primary mt-3 md-3" id='article-link'><a href="/news/<%= article._id %>"> Перейти </a></button></p>
+				  	<% }) %>
+			  	<% } %>
+		  	</div>
 	    </div>
+	  <a href="/users/update"> <button type="button" class="btn btn-primary mt-3 md-3"> Обновить данные </button> </a>  
+	  <a href="/users/changePassword"> <button type="button" class="btn btn-primary mt-3 md-3"> Сменить пароль </button> </a>
+	  <form method="POST" action="/users/delete">   
+	  	<a href="/users/delete"> <button type="submit" class="btn btn-danger mt-4 md-2"> Удалить учетную запись </button> </a>   
+	  </form>
 	  </div>
 	</div>
 

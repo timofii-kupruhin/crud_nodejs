@@ -1,0 +1,62 @@
+<html lang="en">
+<head>
+	<%- include("../partials/head.ejs") -%>
+	<title> Обновить </title>
+	<style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+	</style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+	<%- include("../partials/header.ejs") -%>
+	<% if (auth) { %>
+	<div class="container mt-5">
+	  <div class="profile-container">
+	    <h2>Профиль</h2>
+	    <div id="userProfile">
+	      <form method="POST">
+	        <div class="form-group">
+	          <label for="newName">Новое имя:</label>
+	          <input type="text" class="form-control" id="newName" name="name">
+	          <div class="invalid-feedback">
+	            Пожалуйста, введите ваше новое имя.
+	          </div>
+	        </div>
+	        
+	        <div class="form-group">
+	          <label for="newSurname">Новая фамилия:</label>
+	          <input type="text" class="form-control" id="newSurname" name="surname">
+	          <div class="invalid-feedback">
+	            Пожалуйста, введите вашу новую фамилию.
+	          </div>
+	        </div>
+
+	        <div class="form-group">
+	          <label for="confirmPassword">Пароль:</label>
+	          <input type="password" class="form-control" id="confirmPassword" name="password" minlength="5" maxlength="15" required>
+	          <div class="invalid-feedback" id="passwordMismatch">
+	            Пароль должен быть от 5 до 15 символов.
+	          </div>
+	        </div>
+	        <br>
+	        <!-- <div class="form-group">
+	          <label for="profilePicture">Выберите новое изображение профиля:</label><br>
+	          <input type="file" class="form-control-file" id="profilePicture" name="picture">
+	        </div> -->
+	        <br>
+	        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+	      </form>
+	      
+	    </div>
+	  </div>
+	</div>
+
+	<% } else { %>
+		<p> Error </p>
+	<% } %>
+
+	<%- include("../partials/footer.ejs") -%>
+</body>
+</html>

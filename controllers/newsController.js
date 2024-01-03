@@ -20,9 +20,10 @@ class NewsController {
 	}
 	async updateArticle (req, resp) {
 		const articleId = req.params.id
+		const isAuthorized = req.isAuthorized
 		const data = req.body
-		const is_authorized = req.user == undefined ? false : true
-		if (is_authorized) {
+
+		if (isAuthorized) {
 			NewsServices.updateArticle(articleId, data)
 			return resp.redirect('/users/')
 		} else { 
@@ -32,8 +33,8 @@ class NewsController {
 	async deleteArticle (req, resp) {
 		const articleId = req.params.id
 		const data = req.body
-		const is_authorized = req.user == undefined ? false : true
-		if (is_authorized) {
+		const isAuthorized = req.isAuthorized
+		if (isAuthorized) {
 			NewsServices.deleteOneArticle(articleId)
 			UserServices.updateArticleList(req.user.user_id, articleId)
 			return resp.redirect('/news/')
@@ -43,11 +44,11 @@ class NewsController {
 	}
 
 	async leaveComment (req, resp) {
-		const is_authorized = req.user == undefined ? false : true
+		const isAuthorized = req.isAuthorized
 		const articleId = req.params.id
 		const {text} = req.body
 
-		if (is_authorized) {
+		if (isAuthorized) {
 			const userData = await UserServices.getUserById(req.user.user_id)
 			NewsServices.leaveComment(articleId, userData, text)
 			return resp.redirect(`/news/${articleId}`)
@@ -58,20 +59,20 @@ class NewsController {
 	
 	//  ------------------- GET REQUESTS -------------------
 	async getNewsCreationPage (req, resp) {
-		const is_authorized = req.user == undefined ? false : true 
-		if (is_authorized) { 
-			return resp.render("newspage/newscreate", {auth: is_authorized})
+		const isAuthorized = req.isAuthorized
+		if (isAuthorized) { 
+			return resp.render("newspage/newscreate", {auth: isAuthorized})
 		} else { 
 			return resp.redirect('/users/signin/') 
 		}
 	}
 
 	async getArticlePage(req, resp) { 
-		const is_authorized = req.user == undefined ? false : true 
+		const isAuthorized = req.isAuthorized
 		const articleId = req.params.id
-		let data = { auth: is_authorized, }
+		let data = { auth: isAuthorized, }
 
-		if (is_authorized) {
+		if (isAuthorized) {
 			const userData = await UserServices.getUserById(req.user.user_id)
 			data["userData"] = userData
 		}
@@ -88,10 +89,10 @@ class NewsController {
 	}
 	
 	async getNewsPage (req, resp) { 
-		const is_authorized = req.user == undefined ? false : true 
+		const isAuthorized = req.user == undefined ? false : true 
 		const articles = await NewsServices.getArticles()
 		const data = { 
-			auth: is_authorized, 
+			auth: isAuthorized, 
 			articles: articles
 		}
 
@@ -100,14 +101,14 @@ class NewsController {
 
 	async getUpdateArticlePage (req, resp) { 
 		const articleId = req.params.id
-		const is_authorized = req.user == undefined ? false : true 
+		const isAuthorized = req.isAuthorized
 		const article = await NewsServices.getOneArticle(articleId)
 		let correctDate = await NewsServices.getCorrectDate(article["date"])
 
 		article["date"] = correctDate
 
 		const data = { 
-			auth: is_authorized, 
+			auth: isAuthorized, 
 			article: article
 		}
 

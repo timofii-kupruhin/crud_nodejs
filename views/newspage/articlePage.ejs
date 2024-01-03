@@ -42,7 +42,7 @@
 	  <% if (auth && article.authorId == userData._id ) { %>
 	  <div class="container-grid">
 		<form method="POST" action="/news/<%= article._id %>/delete">
-			<button type="button" class="btn btn-primary mt-3 col-md-2 md-3"><a href="/news/<%= article._id %>/update"> Обновить </a> </button>
+			<a href="/news/<%= article._id %>/update"><button type="button" class="btn btn-primary mt-3 col-md-2 md-3"> Обновить </button></a> 
 			<button type="submit" class="btn btn-primary mt-3 col-md-2 md-3"> Удалить </button>
 		</form>
 	  <% } %>
@@ -68,7 +68,7 @@
 	      <form method="POST" action="/news/<%= article._id %>/comment">
 	        <div class="mb-3">
 	          <label for="commentText" class="form-label">Оставьте ваш комментарий:</label>
-	          <textarea class="form-control" id="commentText" rows="5" cols="5" required name="text" max="200" style="resize:none"></textarea>
+	          <textarea class="form-control" id="commentText" rows="5" cols="5" required name="text" min="1" max="200" style="resize:none"></textarea>
 	        </div>
 	        <button type="submit" class="btn btn-primary">Добавить комментарий</button>
 	      </form>

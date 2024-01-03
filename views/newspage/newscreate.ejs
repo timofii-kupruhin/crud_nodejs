@@ -1,27 +1,27 @@
 <html lang="en">
 <head>
 	<%- include("../partials/head.ejs") -%>
-	<title> Nodesite </title>
+	<title> Создайте свою статью </title>
 </head>
 <style> form {margin: 50px;} </style>
 <body>	
 	<%- include("../partials/header.ejs") -%>
 	<%- include("../partials/successMessage.ejs") -%>	
+	<div class="container">
+		<p id='titleForm' class='mt-5 h3'> Создайте свою статью </p>
 
-	<p id='titleForm'> Create your own article </p>
-
-	<form onsubmit="showSuccess()" method="POST">
-		<div class="mb-3">
-		  <label for="exampleFormControlInput1" class="form-label">Name</label>
-		  <input type="text" class="form-control" id="exampleFormControlInput1" required name='title'>
-		</div>
-		<div class="mb-3">
-		  <label for="exampleFormControlTextarea1" class="form-label">Text</label>
-		  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" required name='text'></textarea>
-		</div>
-		<button type="submit" onclick="" class="btn btn-primary btn-lg"> Submit </button>
-	</form>
-
+		<form onsubmit="showSuccess()" method="POST">
+			<div class="mb-3">
+			  <label for="exampleFormControlInput1" class="form-label"> Заголовок </label>
+			  <input type="text" class="form-control" id="exampleFormControlInput1" required name='title'>
+			</div>
+			<div class="mb-3">
+			  <label for="exampleFormControlTextarea1" class="form-label"> Текст </label>
+			  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" required name='text'></textarea>
+			</div>
+			<button type="submit" onclick="" class="btn btn-primary btn-lg"> Опубликовать </button>
+		</form>
+	</div>
 	<%- include("../partials/footer.ejs") -%>
 </body>
 </html>

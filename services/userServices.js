@@ -11,9 +11,20 @@ class UserServices {
 		const userData = await this.getUserById(userId)
 		return `${userData.name} ${userData.surname}`
 	}
+
 	async updateUserData(userId, data) {
 		const userData = this.getUserById(userId)
 		const updatedUser = await UserModel.findOneAndUpdate({ _id: userId}, data);
+	}
+
+	async deleteUser (userId) {
+		const userData = await UserModel.findOneAndDelete( { _id: userId })
+		return userData
+	}
+	
+	async clearCookies (req, resp) { 
+		await resp.clearCookie("token_auth")
+		resp.end()
 	}
 
 	async updateArticleList (userId, articleId) {

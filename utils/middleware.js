@@ -6,9 +6,11 @@ const isLoggedIn = async (req, res, next) => {
   try {
     if (token) {
       const payload = await jwt.verify(token, process.env.JWT_SECRET);
-      req.user = payload;
+      req.user = payload
+      req.isAuthorized = true
       next()
     } else {
+      req.isAuthorized = false
       next()
     }
   } catch (error) {

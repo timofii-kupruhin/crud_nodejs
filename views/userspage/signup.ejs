@@ -9,25 +9,16 @@
 <body class="d-flex flex-column min-vh-100">
 	<%- include("../partials/header.ejs") -%>	
 	<%- include("../partials/successMessage.ejs") -%>	
-	<% if (auth) { %>
-		<div id="error-wrapper" class='flex justify-content-center'></div>
-		<%- include("../partials/error.ejs") -%>	
-		<a href="/users/logout/" class="h2"> Log out </a>
-		<script>
-			let errorText = document.querySelector("#error")
-			errorText.innerHTML = "You have already logged in, log out firstly if you want to sign up"
-		</script>
-	<% } else { %>
 	<div class="container">
 		<form class="justify-content-center" method="POST">
 		  <div class="col">
 		    <label for="validationServer01" class="form-label">First name</label>
-		    <input type="text" class="form-control is-valid" id="validationServer01" value="Mark" required name='name'>
+		    <input type="text" class="form-control is-valid" id="validationServer01" required name='name'>
 		    <div class="valid-feedback"></div>
 		  </div>
 		  <div class="col">
 		    <label for="validationServer02" class="form-label">Last name</label>
-		    <input type="text" class="form-control is-valid" id="validationServer02" value="Otto" required name='surname'>
+		    <input type="text" class="form-control is-valid" id="validationServer02" required name='surname'>
 		    <div class="valid-feedback"></div>
 		  </div>
 		  <div class="col">
@@ -49,7 +40,6 @@
 		  </div>
 		</form>
 	</div>
-	<% } %>
 	<%- include("../partials/footer.ejs") -%>
 </body>
 </html>
