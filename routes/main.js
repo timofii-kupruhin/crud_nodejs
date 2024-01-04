@@ -1,11 +1,10 @@
 const express = require("express")
-const { isLoggedIn } = require("../utils/middleware.js")
-
 const router = express.Router()
-
+// models 
 const ArticleModel = require("../models/articleModel.js")
 const UserModel = require("../models/usersModels.js")
-
+// middleware 
+const { isLoggedIn } = require("../utils/middleware.js")
 
 router.get("/", isLoggedIn, async (req, resp) => {
 	const is_authorized = req.user == undefined ? false : true 

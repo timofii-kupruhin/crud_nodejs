@@ -1,6 +1,7 @@
+const mongoose = require('mongoose')
+// models
 const UserModel = require("../models/usersModels.js")
 const ArticleModel = require("../models/articleModel.js")
-const mongoose = require('mongoose')
 
 class UserServices { 
 	async getUserById (userId) {

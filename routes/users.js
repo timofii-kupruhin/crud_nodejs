@@ -1,6 +1,8 @@
 const express = require("express")
 const router = express.Router()
+// controllers
 const UserController = require("../controllers/userController.js")
+// middleware
 const { isLoggedIn } = require("../utils/middleware")
 
 router.route("/signup", )

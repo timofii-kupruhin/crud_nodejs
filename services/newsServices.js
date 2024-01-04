@@ -1,5 +1,7 @@
-const ArticleModel = require("../models/articleModel.js")
 const mongoose = require('mongoose')
+// models 
+const ArticleModel = require("../models/articleModel.js")
+// services 
 const UserServices = require("../services/userServices.js")
 
 class NewsServices { 
@@ -18,19 +20,20 @@ class NewsServices {
 		return articleData 
 	}
 
-	async createArticle (title, text, authorName, authorId) { 
+	async createArticle (title, text, authorName, authorId, image) { 
 		const article = await ArticleModel.create(
 		{ 
 			title: title, 
 			text: text,
 			authorName: authorName,
-			authorId: authorId
+			authorId: authorId,
+			image: image
 		})
 		const savedArticle = await article.save()
 		return savedArticle
 	}
 
-	async leaveComment (articleId, userData, text) { 
+	async createComment (articleId, userData, text) { 
 		let articleData = await ArticleModel.findById( articleId )
         const newComment = { 
         	text: text, 
@@ -63,6 +66,7 @@ class NewsServices {
 
 	async deleteOneArticle (articleId) { 
 		const deletedArticle = await ArticleModel.deleteOne({ _id: articleId});
+		return deletedArticle
 	}
 	
 	async deleteManyArticleByAuthor (userId) { 

@@ -23,13 +23,16 @@
       border: 0;
       border-top: 2px solid #ddd; /* Цвет линии */
     }
+    .card-img-top { 
+    	image-rendering: optimizeQuality;
+     }
   </style>
 </head>
 <body>	
 	<%- include("../partials/header.ejs") -%>
 	<div class="container mt-5">
 	  <div class="card">
-	    <img src="https://via.placeholder.com/800x400" class="card-img-top" alt="Заглушка">
+	    <img src="<%= imageSource %>" class="card-img-top" width='400' height='800'>
 	    <div class="card-body">
 	      <h5 class="card-title" id="outputTitle"><%= article.title %> </h5>
 	      <p class="card-text" id="outputText"><%= article.text %></p>

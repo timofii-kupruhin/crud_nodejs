@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
+// models
 const CommentModel = require("./commentModels.js")
 
 const ArticleModelSchema = new Schema({
@@ -8,7 +9,8 @@ const ArticleModelSchema = new Schema({
   date: { type: Date, default: Date.now() },
   authorName: {type: String},
   comments: {type: [CommentModel.schema], default: [] },
-  authorId: { type: String}
+  authorId: { type: String}, 
+  image: {type: Schema.Types.ObjectId}
 }); 
 
 module.exports = mongoose.model("ArticleModel", ArticleModelSchema)

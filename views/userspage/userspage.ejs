@@ -3,58 +3,65 @@
 	<%- include("../partials/head.ejs") -%>
 	<title>Users</title>
 	<style>
-	.links { margin-left: 10px; font-size: 20px; }
-	.links a { text-decoration : none; margin: 5px;}
-	.articles-wrapper a {text-decoration : none; color: white;}
-	.articles-wrapper a:hover{ color: white;}
-	#content { margin-left:0px;  font-size: 35px}
-    body {
-      background-color: #f8f9fa;
-    }
-    .profile-container {
-      max-width: 600px;
-      margin: 50px auto;
-      padding: 20px;
-      background-color: #ffffff;
-      border: 1px solid #dee2e6;
-      border-radius: 5px;
-    }
-    .profile-label {
-      font-weight: bold;
-    }
-    #article-link { padding-left: 15px; margin-left: 50%;}
+	  .links { margin-left: 10px; font-size: 20px; }
+	  .links a { text-decoration : none; margin: 5px;}
+	  .articles-wrapper a {text-decoration : none; color: white;}
+	  .articles-wrapper a:hover{ color: white;}
+	  #content { margin-left:0px;  font-size: 35px}
+	  body {
+	    background-color: #f8f9fa;
+	  }
+	  .profile-container {
+	    width: 500px;
+	    margin: auto;
+	    padding: 30px;
+	    background-color: #ffffff;
+	    border: 1px solid #dee2e6;
+	    border-radius: 5px;
+	  }
+	  .profile-label {
+	    font-weight: bold;
+	  }
+	  #article-link { padding-left: 15px; margin-left: 50%;}
 	</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
 	<%- include("../partials/header.ejs") -%>
-	<% if (auth) { %>
-	
-	<div class="container">
-	  <div class="profile-container">
-	    <h2>Профиль</h2>
-	    <div id="userProfile">
-	      <p class="profile-label" id="email">Почта: <%= userData.email %></p>
-	      <p class="profile-label" id="name">Имя: <%= userData.name %></p>
-	      <p class="profile-label" id="surname">Фамилия: <%= userData.surname %></p>
-	      <p class="profile-label" id="date">Дата регистрации: <%= userData.date %></p>
-		    <p class="h5">Ваши статьи: </p>
-		    <div class="articles-wrapper">
-			    <% if (userData.articles.length == 0) { %>
-			    	<p class="h6"> Пока нету </p>
-			    <% } else { %>
-				    <% userData.articles.forEach((article) => { %>
-				  		<p><%= article.title %>  <button type='button' class="btn btn-primary mt-3 md-3" id='article-link'><a href="/news/<%= article._id %>"> Перейти </a></button></p>
-				  	<% }) %>
-			  	<% } %>
-		  	</div>
-	    </div>
-	  <a href="/users/update"> <button type="button" class="btn btn-primary mt-3 md-3"> Обновить данные </button> </a>  
-	  <a href="/users/changePassword"> <button type="button" class="btn btn-primary mt-3 md-3"> Сменить пароль </button> </a>
-	  <form method="POST" action="/users/delete">   
-	  	<a href="/users/delete"> <button type="submit" class="btn btn-danger mt-4 md-2"> Удалить учетную запись </button> </a>   
-	  </form>
-	  </div>
-	</div>
+  
+    <% if (auth) { %>
+    <div class="container d-flex justify-content-center align-items-center">
+      <div class="profile-container">
+        <h2>Профиль</h2>
+        <div id="userProfile">
+          <% if (!(image))  { %>
+            <img src="/media/default-avatar.jpg" class="card-img-top" height='200'>  
+          <% } else { %>
+            <img src="/media/default-avatar.jpg" class="card-img-top">  
+          <% } %> 
+          <p class="profile-label" id="email">Почта: <%= userData.email %></p>
+          <p class="profile-label" id="name">Имя: <%= userData.name %></p>
+          <p class="profile-label" id="surname">Фамилия: <%= userData.surname %></p>
+          <p class="profile-label" id="date">Дата регистрации: <%= userData.date %></p>
+          <p class="h5">Ваши статьи: </p>
+          <div class="articles-wrapper">
+            <% if (userData.articles.length == 0) { %>
+              <p class="h6"> Пока нету </p>
+            <% } else { %>
+              <% userData.articles.forEach((article) => { %>
+                <p class='h3'><%= article.title %>  <button type='button' class="btn btn-primary mt-3 md-3" id='article-link'><a href="/news/<%= article._id %>"> Перейти </a></button></p>
+              <% }) %>
+            <% } %>
+          </div>
+        </div>
+        <div class="button-container d-flex justify-content-around mt-5">
+	        <a href="/users/update"> <button type="button" class="btn btn-primary md-3"> Обновить данные </button> </a>  
+	        <a href="/users/changePassword"> <button type="button" class="btn btn-primary md-3"> Сменить пароль </button> </a>     
+        </div>
+        <form method="POST" action="/users/delete" class='d-flex justify-content-center' >   
+	          <a href="/users/delete"> <button type="submit" class="btn btn-danger mt-4 md-3"> Удалить учетную запись </button> </a>   
+	        </form>
+      </div>
+    </div>
 
 	<% } else { %>
 		<p> Error </p>

@@ -4,7 +4,7 @@ const cors = require("cors")
 const session = require('express-session');
 const cookies = require("cookie-parser")
 const methodOverride = require("method-override")
-const multer = require("multer")
+
 // enviroment variables
 require('dotenv').config()
 
@@ -12,6 +12,9 @@ require('dotenv').config()
 const mainRouter = require("./routes/main.js")
 const newsRouter = require("./routes/news.js")
 const usersRouter = require("./routes/users.js")
+
+// midlleware 
+const middleware = require("./utils/middleware.js")
 
 const app = express()
 const PORT = process.env.PORT
@@ -34,7 +37,9 @@ app.use("/", mainRouter)
 
 async function main() {
 	try {
-		await mongoose.connect(`${process.env.DB_URL}`);
+		middleware.connectMongo()
+		console.log("Mongo connected!")
+
 		app.listen(PORT) 
 		console.log("Server has been started.. ")
 	}

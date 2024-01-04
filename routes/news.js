@@ -1,11 +1,13 @@
 const express = require("express")
 const router = express.Router()
+// controllers 
 const NewsController = require("../controllers/newsController.js")
-const { isLoggedIn } = require("../utils/middleware")
+// middleware
+const { isLoggedIn, upload } = require("../utils/middleware")
 
 router.route("/create")
 	.get(isLoggedIn, NewsController.getNewsCreationPage)
-	.post(isLoggedIn, NewsController.createArticle)
+	.post([isLoggedIn, upload.single("photo")] , NewsController.createArticle)
 
 router.route("/")
 	.get(isLoggedIn, NewsController.getNewsPage)
@@ -21,6 +23,6 @@ router.route("/:id/delete")
 	.post(isLoggedIn, NewsController.deleteArticle) 
 
 router.route("/:id/comment")
-	.post(isLoggedIn, NewsController.leaveComment) 
+	.post(isLoggedIn, NewsController.createComment) 
 
 module.exports = [router]
