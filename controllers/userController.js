@@ -8,6 +8,7 @@ const UserModel = require("../models/usersModels")
 const CommentsServices = require("../services/commentsServices.js")
 const UserServices = require("../services/userServices.js")
 const NewsServices = require("../services/newsServices.js")
+const ImageServices = require("../services/imageServices.js")
 
 require('dotenv').config()
 
@@ -42,7 +43,7 @@ class UserController {
 
 	async registration(req, resp) {
 		// request data 
-		let {name, surname, email, password} = req.body
+		let {name, surname, email, password, passwordConfirm} = req.body
 		
 		const candidate = await UserModel.findOne({email: email})
 
@@ -55,7 +56,7 @@ class UserController {
 				name: name, 
 				surname: surname, 
 				password: password, 
-				email: email
+				email: email,
 			})
 
 			const user = await doc.save()
@@ -64,31 +65,40 @@ class UserController {
 	}
 
 	async updateUser(req, resp) {
-		const isAuthorized = req.isAuthorized
 		const userId = req.user.user_id
 		// request data 
 		let {name, surname, password} = req.body
+		const image = req.file
 
 		const user = await UserServices.getUserById(userId)
-		// if user didnt changed his name or surname 
-		name = name == "" ? user.name : name 
-		surname = surname == "" ? user.surname : surname 
+		const isCorrectPassword = await bcrypt.compare(password, user.password);
 
-	   	const isCorrectPassword = await bcrypt.compare(password, user.password);
-
-		if (isCorrectPassword) {
-			try { 
-				UserServices.updateUserData(userId, {name: name, surname: surname})
-				return resp.redirect("/users/") 
-			} catch (e) {
-				return resp.json(e)
+		if (isCorrectPassword) {	
+			// if user didnt changed his name or surname 
+			name = name == "" ? user.name : name 
+			surname = surname == "" ? user.surname : surname 
+			
+			let data = { 
+				name: name,
+				surname: surname, 
 			}
+			
+			if ( image ) {
+				if (user.image != null)
+					ImageServices.deleteImage(user.image)
+				data['image'] = image.id
+			} 
+
+			UserServices.updateUserData(userId, data)
+			return resp.redirect("/users/") 
+
 		} else { 
 			return resp.json({error: "Password does not match"})
 		}
+
 	}
+
 	async changePassword (req, resp) {
-		const isAuthorized = req.isAuthorized
 		const userId = req.user.user_id
 		// request data 
 		let { oldPassword, newPassword } = req.body
@@ -112,84 +122,86 @@ class UserController {
 	}
 
 	async deleteUser(req, resp) {
-		const isAuthorized = req.isAuthorized
 		const userId = req.user.user_id
-
-		if (isAuthorized) {
-			UserServices.deleteUser(userId)
-			CommentsServices.deleteUserComments(userId)
-			NewsServices.deleteManyArticleByAuthor( userId )
-			UserServices.clearCookies(req, resp)
-			return resp.redirect("/")
-		} else { 
-			return resp.redirect("/users/signin")
-		}
+		const user = await UserServices.getUserById(userId)
+		
+		ImageServices.deleteImage(user.image)
+		UserServices.deleteUser(userId)
+		CommentsServices.deleteUserComments(userId)
+		NewsServices.deleteManyArticleByAuthor( userId )
+		UserServices.clearCookies(req, resp)
+			
+		return resp.redirect("/")
 	}
+
 
 	//  ------------------- GET REQUESTS -------------------
-	async getLoginPage(req, resp) { 
-		const isAuthorized = req.isAuthorized
 
-		resp.render("userspage/signin", {auth : isAuthorized})
+	async getLoginPage(req, resp) { 
+		resp.render("userspage/signin", {auth : req.isAuthorized})
 	}
 	async getRegisterPage(req, resp) { 
-		const isAuthorized = req.isAuthorized
-
-		resp.render("userspage/signup",  {auth : isAuthorized})
+		resp.render("userspage/signup",  {auth : req.isAuthorized})
 	}
 
 	async getUsersPage(req, resp) { 
-		const isAuthorized = req.isAuthorized
+		if ( !(req.isAuthorized) )
+			return resp.redirect('/users/signin') 
+
 		const userId = req.user.user_id
 
-		let data = { auth: isAuthorized, image: false}
-		
-		if (isAuthorized) {
-			const userData = await UserServices.getUserById(userId)
-			data["userData"] = userData
-
-			if (userData["articles"].length > 0)
-				userData["articles"] = await NewsServices.getUsersArticles(userId)
-
-			userData["date"] = await NewsServices.getCorrectDate(userData["date"])
-
-			return resp.render("userspage/userspage", data )
-
-		} else {
-			return resp.redirect("/users/signin")
+		const userData = await UserServices.getUserById(userId)
+		let data = { 
+			auth: req.isAuthorized, 
+			imageSource: await ImageServices.getImage(userId, false) 
 		}
+
+		data["userData"] = userData
+
+		if (userData["articles"].length > 0)
+			userData["articles"] = await NewsServices.getUsersArticles(userId)
+
+		userData["date"] = await NewsServices.getCorrectDate(userData["date"])
+
+		return resp.render("userspage/userCabinetPage", data )
+
 	}
 
 	async getUserUpdatePage(req, resp) { 
-		const isAuthorized = req.isAuthorized
+		if ( !(req.isAuthorized) )
+			return resp.redirect('/users/signin') 
+		
 		let userData = undefined
+		
 		const data = {
-			auth : isAuthorized,
+			auth : req.isAuthorized,
 			userData: userData
 		}
 
-		if (isAuthorized) {
-			data['userData'] = await UserServices.getUserById(req.user.user_id)
-			return resp.render("userspage/userUpdatePage", data )
-		} else {
-			return resp.redirect('/users/signin')
-		}
+		const userId = req.user.user_id
+		const image = await ImageServices.getImage(userId, false)
+
+		data['userData'] = await UserServices.getUserById(userId)
+		data['imageSource'] = image
+
+		return resp.render("userspage/userUpdatePage", data )
+
 	}
 
 	async getChangePasswordPage(req, resp) { 
-		const isAuthorized = req.isAuthorized
+		if ( !(req.isAuthorized) )
+			return resp.redirect('/users/signin') 
+
 		const { newPassword } = req.body
+
 		let userData = undefined
 		const data = {
-			auth : isAuthorized,
+			auth : req.isAuthorized,
 			userData: userData
 		}
 
-		if (isAuthorized) {
-			return resp.render("userspage/changePasswordPage", data )
-		} else {
-			return resp.redirect('/users/signin')
-		}
+		return resp.render("userspage/changePasswordPage", data )
+
 	}
 
 	async logout (req, resp) {

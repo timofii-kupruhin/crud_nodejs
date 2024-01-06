@@ -33,11 +33,8 @@
       <div class="profile-container">
         <h2>Профиль</h2>
         <div id="userProfile">
-          <% if (!(image))  { %>
-            <img src="/media/default-avatar.jpg" class="card-img-top" height='200'>  
-          <% } else { %>
-            <img src="/media/default-avatar.jpg" class="card-img-top">  
-          <% } %> 
+      	  <img src="<%= imageSource %>"  onerror="this.src='..\\images\\default_avatar.jpg' "class="card-img-top mb-2" id="userImage" height='400'> 
+
           <p class="profile-label" id="email">Почта: <%= userData.email %></p>
           <p class="profile-label" id="name">Имя: <%= userData.name %></p>
           <p class="profile-label" id="surname">Фамилия: <%= userData.surname %></p>

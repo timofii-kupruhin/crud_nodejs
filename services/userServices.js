@@ -1,11 +1,15 @@
 const mongoose = require('mongoose')
 // models
 const UserModel = require("../models/usersModels.js")
-const ArticleModel = require("../models/articleModel.js")
+const ArticleModel = require("../models/articleModels.js")
+const CommentModel = require("../models/commentModels.js")
+// services
+const CommentsServices = require('../services/commentsServices.js')
+const NewsServices = require('../services/newsServices.js')
 
 class UserServices { 
 	async getUserById (userId) {
-		let userData = await UserModel.findById( userId ).lean()
+		const userData = await UserModel.findById( userId ).lean()
 		return userData 
 	}
 	async getUserName (userId) {
@@ -16,6 +20,7 @@ class UserServices {
 	async updateUserData(userId, data) {
 		const userData = this.getUserById(userId)
 		const updatedUser = await UserModel.findOneAndUpdate({ _id: userId}, data);
+		const updatedArticleAuthor = await ArticleModel.updateMany({ authorId: userId}, {authorName: `${data.name} ${data.surname}`});
 	}
 
 	async deleteUser (userId) {
@@ -34,6 +39,7 @@ class UserServices {
 		articleList.splice(articleList.indexOf(articleId))
 		return this.updateUserData(userId, {articles: articleList})
 	}
+
 }
 
 module.exports = new UserServices()

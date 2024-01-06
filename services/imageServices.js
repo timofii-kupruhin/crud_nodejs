@@ -1,6 +1,6 @@
 // models
 const UserModel = require("../models/usersModels.js")
-const ArticleModel = require("../models/articleModel.js")
+const ArticleModel = require("../models/articleModels.js")
 const mongoose = require('mongoose')
 // services
 const NewsServices = require("../services/newsServices.js")
@@ -24,8 +24,13 @@ class ImageServices {
 			data = await UsersServices.getUserById(id)
 		}
 		
+		
+		if ( data.image == null )
+			return ""
+		
 		gfs.collection("photos")
-	    let image = await gfs.files.findOne({ _id: data.image} )
+
+	    const image = await gfs.files.findOne({ _id: data.image} )
 		const stream = await bucket.openDownloadStream(data.image)
 		return new Promise((resolve, reject) => {
 	        stream.on('data', (data) => {

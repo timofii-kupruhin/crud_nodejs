@@ -9,7 +9,7 @@ const UserModelSchema = new Schema({
   email : {type: mongoose.SchemaTypes.Email, allowBlank: false, required: true},
   date: { type: Date, default: Date.now() },
   articles:  {type: [String], allowBlank: true },
-  image: {type: Schema.Types.ObjectId},
+  image: {type: Schema.Types.ObjectId, allowBlank: true, default: null},
   is_admin: { type: Boolean, default: false }
 });
  

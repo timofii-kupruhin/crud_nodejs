@@ -12,11 +12,12 @@
 <body class="d-flex flex-column min-vh-100">
 	<%- include("../partials/header.ejs") -%>
 	<% if (auth) { %>
-	<div class="container mt-5">
+	<div class="container mt-5" style="max-width: 650px;">
 	  <div class="profile-container">
 	    <h2>Профиль</h2>
+	      	<img src="<%= imageSource %>" onerror="this.src='..\\images\\default_avatar.jpg' "class="card-img-top mb-2" id="userImage" height='400'> 
 	    <div id="userProfile">
-	      <form method="POST">
+	      <form method="POST" enctype="multipart/form-data">
 	        <div class="form-group">
 	          <label for="newName">Новое имя:</label>
 	          <input type="text" class="form-control" id="newName" name="name">
@@ -41,22 +42,36 @@
 	          </div>
 	        </div>
 	        <br>
-	        <!-- <div class="form-group">
-	          <label for="profilePicture">Выберите новое изображение профиля:</label><br>
-	          <input type="file" class="form-control-file" id="profilePicture" name="picture">
-	        </div> -->
+	        <div class="custom-file mb-2">
+	            <div class="input-group mb-3">
+				  <input type="file" class="form-control" id="inputGroupFile01" onchange="previewFile()" name="image" accept="image/*">
+				</div>
+		    </div>
 	        <br>
 	        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
 	      </form>
 	      
 	    </div>
 	  </div>
-	</div>
+	  <script>
+		function previewFile() {
+		  let preview = document.querySelector('#userImage');
+		  let file    = document.querySelector('input[type=file]').files[0];
+		  let reader  = new FileReader();
+		  reader.onloadend = function () {
+		    preview.src = reader.result;
+		  }
 
+		  if (file) {
+		    reader.readAsDataURL(file);
+		}
+	}
+	</script>
+	</div>	
+	
 	<% } else { %>
 		<p> Error </p>
 	<% } %>
-
 	<%- include("../partials/footer.ejs") -%>
 </body>
 </html>

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 // models 
 const CommentModel = require("../models/commentModels.js")
-const ArticleModel = require("../models/articleModel.js")
+const ArticleModel = require("../models/articleModels.js")
 
 class CommentsServices { 
 	async deleteUserComments (userId) {

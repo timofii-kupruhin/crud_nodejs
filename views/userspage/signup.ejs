@@ -8,38 +8,64 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 	<%- include("../partials/header.ejs") -%>	
-	<%- include("../partials/successMessage.ejs") -%>	
 	<div class="container">
-		<form class="justify-content-center" method="POST">
+		<form class="justify-content-center" method="POST" onsubmit="return validateForm()">
+			<div class="col text-center mt-5">
+				<h3> Регистрация </h3>
+			</div>
 		  <div class="col">
-		    <label for="validationServer01" class="form-label">First name</label>
+		    <label for="validationServer01" class="form-label"> Имя </label>
 		    <input type="text" class="form-control is-valid" id="validationServer01" required name='name'>
 		    <div class="valid-feedback"></div>
 		  </div>
 		  <div class="col">
-		    <label for="validationServer02" class="form-label">Last name</label>
+		    <label for="validationServer02" class="form-label"> Фамилия </label>
 		    <input type="text" class="form-control is-valid" id="validationServer02" required name='surname'>
 		    <div class="valid-feedback"></div>
 		  </div>
 		  <div class="col">
-		    <label for="validationServer03" class="form-label">Email</label>
+		    <label for="validationServer03" class="form-label"> Почта </label>
 		    <input type="email" class="form-control" id="validationServer03" aria-describedby="validationServer03Feedback" required name='email'>
 		    <div id="validationServer03Feedback" class="invalid-feedback">
 		      Please provide a valid email.
 		    </div>
 		  </div>
-		<div class="mb-3">
-	      <label for="password" class="form-label">Password</label>
-	      <input type="password" class="form-control" id="password" placeholder="Enter your password" required minlength="5" maxlength="15" name='password'>
-	    </div>
-	    <div id="validationServer03Feedback" class="invalid-feedback">
-	        Password must be at least 5-15 characters long.
+		  
+		  <div class="form-group">
+	  	    <label for="newPassword">Новый пароль:</label>
+			<input type="password" class="form-control" id="newPassword"  minlength='5' maxlength='15' name="password" required>
+		    <div class="invalid-feedback">
+			    Пожалуйста, введите новый пароль.
+			</div>
+		  </div>
+
+	      <div class="form-group">
+			<label for="confirmPassword">Подтвердите новый пароль:</label>
+			<input type="password" class="form-control" id="confirmPassword"  minlength='5' maxlength='15' name="passwordConfirm" required>
+			<div class="invalid-feedback" id="passwordMismatch">
+			    Пароли не совпадают.
+			</div>
 	      </div>
-	      <div class="col text-center">
-		    <button class="btn btn-primary" type="submit">Submit form</button>
+	      
+	      <div class="col text-center mt-5">
+		    <button class="btn btn-primary btn-lg" type="submit"> Зарегистрироваться </button>
 		  </div>
 		</form>
 	</div>
+	<script>
+	  function validateForm() {
+	    var password = document.getElementById("newPassword").value;
+	    var confirmPassword = document.getElementById("confirmPassword").value;
+
+	    if (password !== confirmPassword) {
+	      document.getElementById("passwordMismatch").style.display = "block";
+	      return false;
+	    } else {
+	      document.getElementById("passwordMismatch").style.display = "none";
+	      return true;
+	    }
+	  }
+	</script>
 	<%- include("../partials/footer.ejs") -%>
 </body>
 </html>

@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 // models 
-const ArticleModel = require("../models/articleModel.js")
+const ArticleModel = require("../models/articleModels.js")
 const UserModel = require("../models/usersModels.js")
 // middleware 
 const { isLoggedIn } = require("../utils/middleware.js")

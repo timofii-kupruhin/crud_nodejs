@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 // models 
-const ArticleModel = require("../models/articleModel.js")
+const ArticleModel = require("../models/articleModels.js")
 // services 
 const UserServices = require("../services/userServices.js")
 

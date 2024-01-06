@@ -7,7 +7,7 @@ const { isLoggedIn, upload } = require("../utils/middleware")
 
 router.route("/create")
 	.get(isLoggedIn, NewsController.getNewsCreationPage)
-	.post([isLoggedIn, upload.single("photo")] , NewsController.createArticle)
+	.post([isLoggedIn, upload.single("image")] , NewsController.createArticle)
 
 router.route("/")
 	.get(isLoggedIn, NewsController.getNewsPage)
@@ -17,7 +17,7 @@ router.route("/:id")
  
 router.route("/:id/update")
 	.get(isLoggedIn, NewsController.getUpdateArticlePage)
-	.post(isLoggedIn, NewsController.updateArticle) 
+	.post([isLoggedIn, upload.single("image")], NewsController.updateArticle) 
 
 router.route("/:id/delete")
 	.post(isLoggedIn, NewsController.deleteArticle) 

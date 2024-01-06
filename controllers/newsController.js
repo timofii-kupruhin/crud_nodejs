@@ -6,7 +6,7 @@ const UserServices = require("../services/userServices.js")
 const ImageServices = require("../services/imageServices.js")
 // models
 const UserModel = require("../models/usersModels.js")
-const ArticleModel = require("../models/articleModel.js")
+const ArticleModel = require("../models/articleModels.js")
 
 class NewsController {
 	//  ------------------- POST REQUESTS -------------------
@@ -30,10 +30,10 @@ class NewsController {
 		// pushing an article to user list
 		user.articles.push(savedArticle._id) 
 		await user.save()
+		return resp.redirect("/news/")
 	}
 
 	async createComment (req, resp) {
-		const isAuthorized = req.isAuthorized
 		const articleId = req.params.id
 		// request data
 		const {text} = req.body
@@ -45,17 +45,27 @@ class NewsController {
 	}
 
 	async updateArticle (req, resp) {
-		const isAuthorized = req.isAuthorized
 		const articleId = req.params.id
-		// request data 
-		const data = req.body
 
-		if (isAuthorized) {
-			NewsServices.updateArticle(articleId, data)
-			return resp.redirect('/users/')
-		} else { 
-			return resp.redirect("/news/")
+		const article = NewsServices.getOneArticle(articleId)
+
+		// request data 
+		const { title, text, date } = req.body
+		const image = req.file
+
+		let data = {
+			title: title,
+			text: text,
+			date: date
 		}
+		if ( image ) {
+			if (article.image != null)
+				ImageServices.deleteImage(article.image)
+			data['image'] = image.id
+		}
+
+		NewsServices.updateArticle(articleId, data)
+		return resp.redirect('/users/')
 	}
 	async deleteArticle (req, resp) {
 		const articleId = req.params.id
@@ -63,43 +73,35 @@ class NewsController {
 		// request data 
 		const data = req.body
 
-		const isAuthorized = req.isAuthorized
-		if (isAuthorized) {
-			const deletedArticle = await NewsServices.getOneArticle(articleId)
-			NewsServices.deleteOneArticle(articleId)
-			UserServices.updateArticleList(userId, articleId)
-			ImageServices.deleteImage(deletedArticle.image)
+		const deletedArticle = await NewsServices.getOneArticle(articleId)
+		
+		NewsServices.deleteOneArticle(articleId)
+		UserServices.updateArticleList(userId, articleId)
+		ImageServices.deleteImage(deletedArticle.image)
 
-			return resp.redirect('/news/')
-
-		} else { 
-			return resp.redirect("/news/")
-		}
+		return resp.redirect('/news/')
 	}
 
 	//  ------------------- GET REQUESTS -------------------
 	async getNewsCreationPage (req, resp) {
-		const isAuthorized = req.isAuthorized
-		if (isAuthorized) { 
-			return resp.render("newspage/newscreate", {auth: isAuthorized})
-		} else { 
+		if ( !(req.isAuthorized) )
 			return resp.redirect('/users/signin/') 
-		}
+
+		return resp.render("newspage/articleCreationPage", {auth: req.isAuthorized})
 	}
 
 	async getArticlePage(req, resp) { 
-		const isAuthorized = req.isAuthorized
 		const articleId = req.params.id
-
-		let data = { auth: isAuthorized }
+		let data = { auth: req.isAuthorized }
 
 		if ( mongoose.Types.ObjectId.isValid(articleId) ) { 
-			if (isAuthorized) {
+			if ( req.isAuthorized ){
 				const userId = req.user.user_id
 				const userData = await UserServices.getUserById(userId)
 				data["userData"] = userData
 			}
-			const imageSource = await ImageServices.getImage(articleId, {isArticle: true}) 
+
+			const imageSource = await ImageServices.getImage(articleId, true) 
 			let articleData = await NewsServices.getOneArticle(articleId)
 			data["article"] = articleData
 			
@@ -116,40 +118,38 @@ class NewsController {
 	}
 	
 	async getNewsPage (req, resp) { 
-		const isAuthorized = req.isAuthorized
-
 		const articles = await NewsServices.getArticles()
 		
-		const imagesPromises = articles.map(article => ImageServices.getImage(article._id, { isArticle: true }));
+		const imagesPromises = articles.map(article => ImageServices.getImage(article._id, true ));
 		const images = await Promise.all(imagesPromises)
 		const articleAndImage = await articles.map((article, index) => [article, images[index]])
 
 		const data = { 
-		  auth: isAuthorized, 
+		  auth: req.isAuthorized, 
 		  articles: articleAndImage,
 		};
-		return resp.render("newspage/newspage",  data )
+		return resp.render("newspage/articlesPage",  data )
 	}
 
 	async getUpdateArticlePage (req, resp) { 
+		if ( !(req.isAuthorized) )
+			return resp.redirect('/news/') 
+
 		const articleId = req.params.id
-		const isAuthorized = req.isAuthorized
+		
+		const article = await NewsServices.getOneArticle(articleId)
+		const correctDate = await NewsServices.getCorrectDate(article["date"])
 
-		if (isAuthorized) {
-			const article = await NewsServices.getOneArticle(articleId)
-			const correctDate = await NewsServices.getCorrectDate(article["date"])
+		article["date"] = correctDate
+		article["imageSource"] = await ImageServices.getImage(articleId, true )
 
-			article["date"] = correctDate
-
-			const data = { 
-				auth: isAuthorized, 
-				article: article
-			}
-
-			return resp.render("newspage/updatePage",  data )
-		} else { 
-			return resp.redirect("/news/")
+		const data = { 
+			auth: req.isAuthorized, 
+			article: article
 		}
+
+		return resp.render("newspage/articleUpdatePage",  data )
+
 	}
 }
 

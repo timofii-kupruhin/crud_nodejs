@@ -45,5 +45,6 @@ async function connectMongo( ) {
 
 module.exports = {
   isLoggedIn,
-  upload, connectMongo
+  connectMongo,
+  upload, 
 };

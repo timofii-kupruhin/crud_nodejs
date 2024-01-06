@@ -4,7 +4,7 @@ const cors = require("cors")
 const session = require('express-session');
 const cookies = require("cookie-parser")
 const methodOverride = require("method-override")
-
+const path = require('path')
 // enviroment variables
 require('dotenv').config()
 
@@ -21,6 +21,7 @@ const PORT = process.env.PORT
 
 app.set("view engine", 'ejs')
 app.set("views", './views')
+app.use(express.static(path.join(__dirname, 'public')))
 
 // encoding 
 app.use(express.urlencoded({ extended: true }))

@@ -4,36 +4,38 @@
 	<title>Sign in</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
-	<%- include("../partials/header.ejs") -%>	
+	<%- include("../partials/header.ejs") -%>
+
 	<% if (auth) { %>
 		<div id="error-wrapper" class='flex justify-content-center'></div>
-		<%- include("../partials/error.ejs") -%>	
+		<%- include("../partials/errors/error.ejs") -%>	
 		<a href="/users/logout/" class="h2"> Log out </a>
-		<script>
-			let errorText = document.querySelector("#error")
-			errorText.innerHTML = "You have already logged in, log out firstly if you want to sign in an another account"
-		</script>
 	<% } else { %>
-	<div class="container">
-		<br>
-		<h3>Log in</h3>
-		<div class="container mt-5">
+	<div class="container mt-5">
+	<div class="col text-center mt-5">
+		<h3> Вход </h3>
+	</div>
 	  <form method="POST">
 	    <div class="mb-3">
-	      <label for="email" class="form-label">Email address</label>
+	      <label for="email" class="form-label"> Почта </label>
 	      <input type="email" class="form-control" id="email" placeholder="Enter your email" name="email" required>
 	    </div>
 
 	    <div class="mb-3">
-	      <label for="password" class="form-label">Password</label>
+	      <label for="password" class="form-label"> Пароль </label>
 	      <input type="password" class="form-control" id="password" placeholder="Enter your password" name="password" required>
 	    </div>
-
-	    <button type="submit" class="btn btn-primary">Login</button>
+	    <div class='col text-center mt-5'>
+	    	<button type="submit" class="btn btn-primary btn-lg"> Войти </button>
+	    </div>
 	  </form>
-	</div>
 	</div>
 	<% } %>
 	<%- include("../partials/footer.ejs") -%>	
+
+	<script>
+		let errorText = document.querySelector("#error")
+		errorText.innerHTML = "You have already logged in, log out firstly if you want to sign in an another account"
+	</script>
 </body>
 </html>

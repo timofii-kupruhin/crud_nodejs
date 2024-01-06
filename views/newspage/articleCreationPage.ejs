@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+	<%- include("../partials/head.ejs") -%>
+	<title> Создайте свою статью </title>
+</head>
+<style> form {margin: 50px;} </style>
+<body>	
+	<%- include("../partials/header.ejs") -%>
+	<div class="container mb-1" style='max-width: 800px'>
+		<div class="container mb-5">
+		
+			<p id='titleForm' class='mt-5 h3'> Создайте свою статью </p>
+			
+			<form method="POST" id="uploadForm" enctype="multipart/form-data">
+			    <div class="form-group">
+		      	  <img src="\images\blank.png" class="card-img-top mb-2" id="articleImage" height='500'> 
+			      <label for="photo">Выберите фотографию:</label><br>
+			      <div class="input-group mb-3">
+					  <input type="file" class="form-control" id="inputGroupFile01" onchange="previewFile()" name="image" required accept="image/*">
+					</div>
+
+				  <label for="exampleFormControlInput1" class="form-label"> Заголовок </label>
+				  <input type="text" class="form-control" id="exampleFormControlInput1" required name='title'>
+				<div class="mb-3">
+				  <label for="exampleFormControlTextarea1" class="form-label"> Текст </label>
+				  <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" required name='text' style='resize: none;'></textarea>
+				</div>
+				<button type="submit" class="btn btn-primary btn-lg"> Опубликовать </button>
+			</form>
+			    </div>
+			
+		</div>
+	</div>
+	<%- include("../partials/footer.ejs") -%>
+
+  	<script>
+		function previewFile() {
+		  let preview = document.querySelector('#articleImage')
+		  let file    = document.querySelector('input[type=file]').files[0];
+		  let reader  = new FileReader();
+		  reader.onloadend = function () {
+		    preview.src = reader.result;
+		  }
+
+		  if (file) {
+		    reader.readAsDataURL(file);
+		  }	else { 
+		  	preview.src = "/images/blank.png"
+		  }
+	}
+	</script>
+</body>
+</html>

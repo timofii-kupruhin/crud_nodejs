@@ -3,7 +3,7 @@ const router = express.Router()
 // controllers
 const UserController = require("../controllers/userController.js")
 // middleware
-const { isLoggedIn } = require("../utils/middleware")
+const { isLoggedIn, upload } = require("../utils/middleware")
 
 router.route("/signup", )
 	.get(isLoggedIn, UserController.getRegisterPage)
@@ -17,7 +17,7 @@ router.route("/logout", ).get(UserController.logout)
 
 router.route("/update", )
 	.get(isLoggedIn, UserController.getUserUpdatePage)
-	.post(isLoggedIn, UserController.updateUser)
+	.post([isLoggedIn, upload.single("image")], UserController.updateUser)
 
 router.route("/changePassword", )
 	.get(isLoggedIn, UserController.getChangePasswordPage)
