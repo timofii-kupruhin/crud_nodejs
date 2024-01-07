@@ -7,6 +7,7 @@ const multer = require("multer")
 
 // services
 const { ErrorService } = require("../services/errorService.js")
+const createError = require('http-errors');
 
 require("dotenv").config()
 
@@ -39,10 +40,11 @@ const storage = new GridFsStorage({
 })    
 const upload = multer({ storage })
 
-const errorHandler = async (err, req, res, next) => {
-  let data = await ErrorService.errorHandler(err.message, err.status)
-  data['auth'] = req.session.isAuthorized
-    
+const errorHandler = async (err, req, res, next ) => {
+  let data = { auth: req.session.isAuthorized }
+  if (err.status >= 400 && err.status < 500) { 
+    data["error"] = await ErrorService.errorHandler(err.message, err.status)
+  }    
   return res.render('partials/errors/errorTemplate',  data)
 }
 

@@ -4,6 +4,8 @@ const mongoose = require("mongoose")
 const NewsServices = require("../services/newsServices.js")
 const UserServices = require("../services/userServices.js")
 const ImageServices = require("../services/imageServices.js")
+const { ErrorServices, CustomError } = require("../services/errorService.js")
+
 // models
 const UserModel = require("../models/usersModels.js")
 const ArticleModel = require("../models/articleModels.js")
@@ -119,7 +121,7 @@ class NewsController {
 
 			return resp.render("newsPage/articlePage", data)
 		} else { 
-			return resp.redirect("/news/")
+			throw new CustomError("Неверный адресс статьи ", 404)
 		}
 	}
 	

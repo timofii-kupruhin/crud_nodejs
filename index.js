@@ -14,6 +14,7 @@ require('dotenv').config()
 
 // error handler 
 require("express-async-errors")
+const { ErrorService } = require('./services/errorService.js')
 
 // routes 
 const mainRouter = require("./routes/main.js")
@@ -46,6 +47,11 @@ app.use( sessionConfig )
 app.use("/news", newsRouter)
 app.use("/users", usersRouter)
 app.use("/", mainRouter)
+
+app.use(ErrorService.httpError400)
+app.use(ErrorService.httpError403)
+app.use(ErrorService.httpError404)
+app.use(ErrorService.httpError500)
 
 app.use(middleware.errorHandler)
 
