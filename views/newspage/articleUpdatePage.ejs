@@ -6,27 +6,12 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title> <%= article.title %></title>
-
-	<style>
-	    body {
-	      background-color: #f8f9fa;
-	    }
-	    .form-container {
-	      max-width: 600px;
-	      margin: 50px auto;
-	      padding: 20px;
-	      background-color: #ffffff;
-	      border: 1px solid #dee2e6;
-	      border-radius: 5px;
-	    }
-	</style>
+	<script src="/js/imagePreview.js"></script>
+	<link rel="stylesheet" href="/css/articleUpdatePage.css">
 	
 </head>
 <body>
  	<%- include("../partials/header.ejs") -%>
-		<% article.title %>
-		<% article.text %>
-		<% article.date %>
 	<div class="container">
 	  <div class="form-container">
 	    <h2>Форма редактирования статьи</h2>
@@ -57,20 +42,6 @@
 	    </form>
 	  </div>
 	</div>
-	<script>
-		function previewFile() {
-		  let preview = document.querySelector('img');
-		  let file    = document.querySelector('input[type=file]').files[0];
-		  let reader  = new FileReader();
-		  reader.onloadend = function () {
-		    preview.src = reader.result;
-		  }
-
-		  if (file) {
-		    reader.readAsDataURL(file);
-		  }
-		}
-	</script>
 	<%- include("../partials/footer.ejs") -%>
 </body>
 </html>

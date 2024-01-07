@@ -1,0 +1,20 @@
+.links { margin-left: 10px; font-size: 20px; }
+.links a { text-decoration : none; margin: 5px;}
+.articles-wrapper a {text-decoration : none; color: white;}
+.articles-wrapper a:hover{ color: white;}
+#content { margin-left:0px;  font-size: 35px}
+body {
+background-color: #f8f9fa;
+}
+.profile-container {
+width: 500px;
+margin: auto;
+padding: 30px;
+background-color: #ffffff;
+border: 1px solid #dee2e6;
+border-radius: 5px;
+}
+.profile-label {
+font-weight: bold;
+}
+#article-link { padding-left: 15px; margin-left: 50%;}

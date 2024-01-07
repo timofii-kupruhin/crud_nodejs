@@ -12,7 +12,7 @@ class NewsController {
 	//  ------------------- POST REQUESTS -------------------
 		
 	async createArticle (req, resp) { 
-		const userId = req.user.user_id
+		const userId = req.session.user.user_id
 		// request data 
 		const {title, text} = req.body
 		const file = req.file
@@ -35,10 +35,12 @@ class NewsController {
 
 	async createComment (req, resp) {
 		const articleId = req.params.id
+		const userId = req.session.user.user_id
+
 		// request data
 		const {text} = req.body
 
-		const userData = await UserServices.getUserById(req.user.user_id)
+		const userData = await UserServices.getUserById(userId)
 		NewsServices.createComment(articleId, userData, text)
 		
 		return resp.redirect(`/news/${articleId}`)
@@ -69,7 +71,7 @@ class NewsController {
 	}
 	async deleteArticle (req, resp) {
 		const articleId = req.params.id
-		const userId = req.user.user_id
+		const userId = req.session.user.user_id
 		// request data 
 		const data = req.body
 
@@ -84,19 +86,23 @@ class NewsController {
 
 	//  ------------------- GET REQUESTS -------------------
 	async getNewsCreationPage (req, resp) {
-		if ( !(req.isAuthorized) )
+		const isAuthorized = req.session.isAuthorized
+
+		if ( !(isAuthorized) )
 			return resp.redirect('/users/signin/') 
 
-		return resp.render("newspage/articleCreationPage", {auth: req.isAuthorized})
+		return resp.render("newspage/articleCreationPage", {auth: isAuthorized})
 	}
 
 	async getArticlePage(req, resp) { 
 		const articleId = req.params.id
-		let data = { auth: req.isAuthorized }
+		const isAuthorized = req.session.isAuthorized
+
+		let data = { auth: isAuthorized }
 
 		if ( mongoose.Types.ObjectId.isValid(articleId) ) { 
-			if ( req.isAuthorized ){
-				const userId = req.user.user_id
+			if ( isAuthorized ){
+				const userId = req.session.user.user_id
 				const userData = await UserServices.getUserById(userId)
 				data["userData"] = userData
 			}
@@ -118,6 +124,7 @@ class NewsController {
 	}
 	
 	async getNewsPage (req, resp) { 
+		const isAuthorized = req.session.isAuthorized
 		const articles = await NewsServices.getArticles()
 		
 		const imagesPromises = articles.map(article => ImageServices.getImage(article._id, true ));
@@ -125,14 +132,16 @@ class NewsController {
 		const articleAndImage = await articles.map((article, index) => [article, images[index]])
 
 		const data = { 
-		  auth: req.isAuthorized, 
+		  auth: isAuthorized, 
 		  articles: articleAndImage,
 		};
 		return resp.render("newspage/articlesPage",  data )
 	}
 
-	async getUpdateArticlePage (req, resp) { 
-		if ( !(req.isAuthorized) )
+	async getUpdateArticlePage (req, resp) {
+		const isAuthorized = req.session.isAuthorized
+
+		if ( !(isAuthorized) )
 			return resp.redirect('/news/') 
 
 		const articleId = req.params.id
@@ -144,7 +153,7 @@ class NewsController {
 		article["imageSource"] = await ImageServices.getImage(articleId, true )
 
 		const data = { 
-			auth: req.isAuthorized, 
+			auth: isAuthorized, 
 			article: article
 		}
 

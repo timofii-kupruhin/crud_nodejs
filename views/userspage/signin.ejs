@@ -1,16 +1,11 @@
 <html lang="en">
 <head>
 	<%- include("../partials/head.ejs") -%>
-	<title>Sign in</title>
+	<title> Вход </title>
 </head>
 <body class="d-flex flex-column min-vh-100">
 	<%- include("../partials/header.ejs") -%>
 
-	<% if (auth) { %>
-		<div id="error-wrapper" class='flex justify-content-center'></div>
-		<%- include("../partials/errors/error.ejs") -%>	
-		<a href="/users/logout/" class="h2"> Log out </a>
-	<% } else { %>
 	<div class="container mt-5">
 	<div class="col text-center mt-5">
 		<h3> Вход </h3>
@@ -30,12 +25,6 @@
 	    </div>
 	  </form>
 	</div>
-	<% } %>
 	<%- include("../partials/footer.ejs") -%>	
-
-	<script>
-		let errorText = document.querySelector("#error")
-		errorText.innerHTML = "You have already logged in, log out firstly if you want to sign in an another account"
-	</script>
 </body>
 </html>

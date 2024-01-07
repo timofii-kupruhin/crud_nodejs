@@ -7,11 +7,12 @@ const UserModel = require("../models/usersModels.js")
 const { isLoggedIn } = require("../utils/middleware.js")
 
 router.get("/", isLoggedIn, async (req, resp) => {
-	const is_authorized = req.user == undefined ? false : true 
-	let data = {auth: is_authorized}
-	if (is_authorized) { 
-		const user = await UserModel.findOne( { _id: req.user.user_id } )
-		data = {auth: is_authorized, user: user}
+	const isAuthorized = req.session.isAuthorized
+	let data = { auth: isAuthorized }
+	if (isAuthorized) { 
+		const userId = req.session.user.user_id
+		const user = await UserModel.findOne( { _id: userId } )
+		data = {auth: isAuthorized, user: user}
 	} 
 	return resp.render("mainpage/mainpage", data)
 })

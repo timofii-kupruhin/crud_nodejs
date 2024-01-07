@@ -1,0 +1,13 @@
+#rowDiv { 
+	margin-left: 15px;
+	margin-right: 15px;
+}
+.card {
+	padding: 2px;
+	margin-right: 15px;
+	margin-left: 25px;
+	margin-bottom: 5px;
+	margin-top:25px;
+}
+body { background: #f8f9fa; }
+a { text-decoration: none; }

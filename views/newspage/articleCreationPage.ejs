@@ -2,8 +2,9 @@
 <head>
 	<%- include("../partials/head.ejs") -%>
 	<title> Создайте свою статью </title>
+	<script src="/js/imagePreview.js"></script>
+	<style> form {margin: 50px;} </style>
 </head>
-<style> form {margin: 50px;} </style>
 <body>	
 	<%- include("../partials/header.ejs") -%>
 	<div class="container mb-1" style='max-width: 800px'>
@@ -14,7 +15,6 @@
 			<form method="POST" id="uploadForm" enctype="multipart/form-data">
 			    <div class="form-group">
 		      	  <img src="\images\blank.png" class="card-img-top mb-2" id="articleImage" height='500'> 
-			      <label for="photo">Выберите фотографию:</label><br>
 			      <div class="input-group mb-3">
 					  <input type="file" class="form-control" id="inputGroupFile01" onchange="previewFile()" name="image" required accept="image/*">
 					</div>
@@ -33,21 +33,5 @@
 	</div>
 	<%- include("../partials/footer.ejs") -%>
 
-  	<script>
-		function previewFile() {
-		  let preview = document.querySelector('#articleImage')
-		  let file    = document.querySelector('input[type=file]').files[0];
-		  let reader  = new FileReader();
-		  reader.onloadend = function () {
-		    preview.src = reader.result;
-		  }
-
-		  if (file) {
-		    reader.readAsDataURL(file);
-		  }	else { 
-		  	preview.src = "/images/blank.png"
-		  }
-	}
-	</script>
 </body>
 </html>

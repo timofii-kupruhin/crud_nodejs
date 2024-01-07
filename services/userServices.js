@@ -28,9 +28,11 @@ class UserServices {
 		return userData
 	}
 	
-	async clearCookies (req, resp) { 
-		await resp.clearCookie("token_auth")
-		resp.end()
+	async endSession (req, resp) { 
+		req.session.destroy((err) => {
+			if (err) console.log(err)
+			resp.redirect("/")
+		})
 	}
 
 	async updateArticleList (userId, articleId) {

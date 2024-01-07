@@ -9,6 +9,7 @@ const CommentsServices = require("../services/commentsServices.js")
 const UserServices = require("../services/userServices.js")
 const NewsServices = require("../services/newsServices.js")
 const ImageServices = require("../services/imageServices.js")
+const { ErrorService, CustomError } = require("../services/errorService.js")
 
 require('dotenv').config()
 
@@ -21,23 +22,18 @@ class UserController {
 		const user = await UserModel.findOne( { email: email } )
 	    
 	    if (user) {
-	   	  const isCorrectPassword = await bcrypt.compare(password, user.password);
-	    
-	    if (isCorrectPassword) {
-	      const token = await jwt.sign({ user_id: user._id }, process.env.JWT_SECRET, {expiresIn: '1h'});
-	      
-	      resp.cookie("token_auth", token, { 
-	     		httpOnly: true, 
-	     		secure: true,
-	     		maxAge: 60*1000*60
-	      })
-	      return resp.redirect(`/users/`)
-	    
+	   	  const isCorrectPassword = await bcrypt.compare(password, user.password); 
+		    if (isCorrectPassword) {
+		      const token = await jwt.sign({ user_id: user._id }, process.env.JWT_SECRET, {expiresIn: '1h'});
+		      
+		      req.session.token_auth = token 
+		      return resp.redirect(`/users/`)
+		    
+		    } else {
+				throw new CustomError("Неправильный пароль", 400)
+		    }
 	    } else {
-	      resp.status(400).json({ error: "Password doesn't match !"});
-	    }
-	    } else {
-	      resp.status(400).json({ error: "User doesn't exist" });
+			throw new CustomError("Такого пользователя не существует", 400)
 	    }
 	}
 
@@ -48,7 +44,7 @@ class UserController {
 		const candidate = await UserModel.findOne({email: email})
 
 		if (candidate) {
-			resp.status(404).json({ error: 'User already exists !!!' })
+			throw new CustomError("Пользователь с такой почтой уже существует", 400)
 		} else {
 			password = await bcrypt.hash(password, 10)
 		
@@ -65,7 +61,7 @@ class UserController {
 	}
 
 	async updateUser(req, resp) {
-		const userId = req.user.user_id
+		const userId = req.session.user.user_id
 		// request data 
 		let {name, surname, password} = req.body
 		const image = req.file
@@ -99,11 +95,11 @@ class UserController {
 	}
 
 	async changePassword (req, resp) {
-		const userId = req.user.user_id
+		const userId = req.session.user.user_id
+		const user = await UserServices.getUserById(userId)
+		
 		// request data 
 		let { oldPassword, newPassword } = req.body
-		
-		const user = await UserServices.getUserById(userId)
 
 	   	const isCorrectPassword = await bcrypt.compare(oldPassword, user.password);
 
@@ -117,42 +113,50 @@ class UserController {
 				return resp.json(e)
 			}
 		} else { 
-			return resp.json({error: "Old password incorrect"})
+			throw new CustomError("Неправильный старый пароль", 400)
 		}
 	}
 
 	async deleteUser(req, resp) {
-		const userId = req.user.user_id
+		const userId = req.session.user.user_id
+		
 		const user = await UserServices.getUserById(userId)
 		
-		ImageServices.deleteImage(user.image)
-		UserServices.deleteUser(userId)
-		CommentsServices.deleteUserComments(userId)
-		NewsServices.deleteManyArticleByAuthor( userId )
-		UserServices.clearCookies(req, resp)
-			
-		return resp.redirect("/")
+		if (user.image != null)
+			await ImageServices.deleteImage(user.image)
+		await UserServices.deleteUser(userId)
+		await CommentsServices.deleteUserComments(userId)
+		await NewsServices.deleteManyArticleByAuthor( userId )
+		await UserServices.endSession(req, resp)
 	}
-
 
 	//  ------------------- GET REQUESTS -------------------
 
 	async getLoginPage(req, resp) { 
-		resp.render("userspage/signin", {auth : req.isAuthorized})
+		const isAuthorized = req.session.isAuthorized
+		if (!(isAuthorized)) {
+			resp.render("userspage/signin", {auth : isAuthorized})
+	    } else { 
+			throw new CustomError("Вы уже авторизованы", 403)	
+	    }
 	}
 	async getRegisterPage(req, resp) { 
-		resp.render("userspage/signup",  {auth : req.isAuthorized})
+		const isAuthorized = req.session.isAuthorized
+
+		resp.render("userspage/signup",  {auth : isAuthorized})
 	}
 
 	async getUsersPage(req, resp) { 
-		if ( !(req.isAuthorized) )
+		const isAuthorized = req.session.isAuthorized
+
+		if ( !(isAuthorized) )
 			return resp.redirect('/users/signin') 
 
-		const userId = req.user.user_id
+		const userId = req.session.user.user_id
 
 		const userData = await UserServices.getUserById(userId)
 		let data = { 
-			auth: req.isAuthorized, 
+			auth: isAuthorized, 
 			imageSource: await ImageServices.getImage(userId, false) 
 		}
 
@@ -168,17 +172,19 @@ class UserController {
 	}
 
 	async getUserUpdatePage(req, resp) { 
-		if ( !(req.isAuthorized) )
+		const isAuthorized = req.session.isAuthorized
+
+		if ( !(isAuthorized) )
 			return resp.redirect('/users/signin') 
 		
 		let userData = undefined
 		
 		const data = {
-			auth : req.isAuthorized,
+			auth : isAuthorized,
 			userData: userData
 		}
 
-		const userId = req.user.user_id
+		const userId = req.session.user.user_id
 		const image = await ImageServices.getImage(userId, false)
 
 		data['userData'] = await UserServices.getUserById(userId)
@@ -189,14 +195,16 @@ class UserController {
 	}
 
 	async getChangePasswordPage(req, resp) { 
-		if ( !(req.isAuthorized) )
+		const isAuthorized = req.session.isAuthorized
+
+		if ( !(isAuthorized) )
 			return resp.redirect('/users/signin') 
 
 		const { newPassword } = req.body
 
 		let userData = undefined
 		const data = {
-			auth : req.isAuthorized,
+			auth : isAuthorized,
 			userData: userData
 		}
 
@@ -205,8 +213,7 @@ class UserController {
 	}
 
 	async logout (req, resp) {
-		UserServices.clearCookies(req, resp)
-		resp.redirect('/')
+		UserServices.endSession(req, resp)
 	}
 	
 }

@@ -2,14 +2,9 @@
 <head>
 	<%- include("../partials/head.ejs") -%>
 	<title> Обновить </title>
-	<style>
-    body {
-      background-color: #f8f9fa;
-    }
-
-	</style>
+	<script src="\js\imagePreview.js"></script>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100" style="background-color: #f8f9fa;">
 	<%- include("../partials/header.ejs") -%>
 	<% if (auth) { %>
 	<div class="container mt-5" style="max-width: 650px;">
@@ -53,20 +48,6 @@
 	      
 	    </div>
 	  </div>
-	  <script>
-		function previewFile() {
-		  let preview = document.querySelector('#userImage');
-		  let file    = document.querySelector('input[type=file]').files[0];
-		  let reader  = new FileReader();
-		  reader.onloadend = function () {
-		    preview.src = reader.result;
-		  }
-
-		  if (file) {
-		    reader.readAsDataURL(file);
-		}
-	}
-	</script>
 	</div>	
 	
 	<% } else { %>

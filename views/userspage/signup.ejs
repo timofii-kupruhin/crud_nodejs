@@ -1,15 +1,13 @@
 <html lang="en">
 <head>
 	<%- include("../partials/head.ejs") -%>
-	<title>Sign up</title>
-	<style>
-		form { margin: 50px ; }
-	</style>
+	<title> Регистрация </title>
+    <script src="/js/validatePasswordField.js"></script>
 </head>
 <body class="d-flex flex-column min-vh-100">
 	<%- include("../partials/header.ejs") -%>	
 	<div class="container">
-		<form class="justify-content-center" method="POST" onsubmit="return validateForm()">
+		<form class="justify-content-center" method="POST" style="margin: 50px;" onsubmit="return validateForm()">
 			<div class="col text-center mt-5">
 				<h3> Регистрация </h3>
 			</div>
@@ -52,20 +50,6 @@
 		  </div>
 		</form>
 	</div>
-	<script>
-	  function validateForm() {
-	    var password = document.getElementById("newPassword").value;
-	    var confirmPassword = document.getElementById("confirmPassword").value;
-
-	    if (password !== confirmPassword) {
-	      document.getElementById("passwordMismatch").style.display = "block";
-	      return false;
-	    } else {
-	      document.getElementById("passwordMismatch").style.display = "none";
-	      return true;
-	    }
-	  }
-	</script>
 	<%- include("../partials/footer.ejs") -%>
 </body>
 </html>
