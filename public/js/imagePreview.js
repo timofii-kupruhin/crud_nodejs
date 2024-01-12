@@ -1,5 +1,5 @@
 function previewFile() {
-	let preview = document.querySelector('#articleImage')
+	let preview = document.querySelector('#imageField')
 	let file    = document.querySelector('input[type=file]').files[0];
 	let reader  = new FileReader();
 	reader.onloadend = function () {

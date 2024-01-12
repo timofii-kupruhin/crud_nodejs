@@ -25,7 +25,7 @@ const app = express()
 
 app.set("view engine", 'ejs')
 app.set("views", './views')
-app.set('trust proxy', 1)
+app.enable('trust proxy')
 
 // static folder
 app.use(express.static(path.join(__dirname, 'public')))
