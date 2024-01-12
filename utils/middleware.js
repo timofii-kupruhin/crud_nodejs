@@ -29,7 +29,7 @@ const isLoggedIn = async (req, res, next) => {
 }
   
 const storage = new GridFsStorage({
-  url: `${process.env.DB_URL}`,
+  url: `${process.env.MONGO_DB_URL}`,
   file: (req, file) => {
     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
       return { bucketName: 'photos' }
@@ -37,28 +37,19 @@ const storage = new GridFsStorage({
       return null;
     }
   }
-})    
-const upload = multer({ storage })
+})
 
 const errorHandler = async (err, req, res, next ) => {
   let data = { auth: req.session.isAuthorized }
+
   if (err.status >= 400 && err.status < 500) { 
     data["error"] = await ErrorService.errorHandler(err.message, err.status)
+    return res.status(err.status).render('partials/errors/errorTemplate',  data)
   }    
-  return res.render('partials/errors/errorTemplate',  data)
-}
-
-async function connectMongo( ) {
-  try {
-    const conn = await mongoose.connect(`${process.env.DB_URL}`)
-    return conn
-  }
-  catch(err) { return console.log(err); }
 }
 
 module.exports = {
   isLoggedIn,
-  connectMongo,
-  upload, 
+  upload: multer({ storage }), 
   errorHandler
 };

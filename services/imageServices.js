@@ -18,20 +18,20 @@ class ImageServices {
 		let imageData = ""
 		let data = null 
 
-		if  (isArticle){
+		if  (isArticle) {
 			data = await NewsServices.getOneArticle(id)
 		} else { 
 			data = await UsersServices.getUserById(id)
 		}
 		
-		
 		if ( data.image == null )
-			return ""
+			return null
 		
 		gfs.collection("photos")
-
+	
 	    const image = await gfs.files.findOne({ _id: data.image} )
 		const stream = await bucket.openDownloadStream(data.image)
+
 		return new Promise((resolve, reject) => {
 	        stream.on('data', (data) => {
 		        imageData += data.toString('base64');
@@ -48,6 +48,7 @@ class ImageServices {
 		const bucket = new mongoose.mongo.GridFSBucket(connection, { bucketName: 'photos' });
 
 		bucket.delete(imageSource)
+
 	}
 
 }

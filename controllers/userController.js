@@ -9,7 +9,7 @@ const CommentsServices = require("../services/commentsServices.js")
 const UserServices = require("../services/userServices.js")
 const NewsServices = require("../services/newsServices.js")
 const ImageServices = require("../services/imageServices.js")
-const { ErrorService, CustomError } = require("../services/errorService.js")
+const { ErrorService, BadRequestError, ForbiddenError } = require("../services/errorService.js")
 
 require('dotenv').config()
 
@@ -30,10 +30,10 @@ class UserController {
 		      return resp.redirect(`/users/`)
 		    
 		    } else {
-				throw new CustomError("Неправильный пароль", 400)
+				throw new BadRequestError("Неправильный пароль")
 		    }
 	    } else {
-			throw new CustomError("Такого пользователя не существует", 400)
+			throw new BadRequestError("Такого пользователя не существует")
 	    }
 	}
 
@@ -44,7 +44,7 @@ class UserController {
 		const candidate = await UserModel.findOne({email: email})
 
 		if (candidate) {
-			throw new CustomError("Пользователь с такой почтой уже существует", 400)
+			throw new BadRequestError("Пользователь с такой почтой уже существует")
 		} else {
 			password = await bcrypt.hash(password, 10)
 		
@@ -54,9 +54,9 @@ class UserController {
 				password: password, 
 				email: email,
 			})
-
-			const user = await doc.save()
-			resp.redirect('/users/signin/')
+			
+			await doc.save()
+			return resp.redirect('/users/signin/')
 		}
 	}
 
@@ -86,10 +86,10 @@ class UserController {
 			} 
 
 			UserServices.updateUserData(userId, data)
-			return resp.redirect("/users/") 
+			return resp.redirect("/users/")
 
 		} else { 
-			return resp.json({error: "Password does not match"})
+			throw new BadRequestError("Неправильный пароль")
 		}
 
 	}
@@ -108,12 +108,12 @@ class UserController {
 				UserServices.updateUserData(userId, {
 					password: await bcrypt.hash(newPassword, 10) 
 				})
-				return resp.redirect("/users/") 
+				return resp.redirect("/users/")
 			} catch (e) {
-				return resp.json(e)
+				console.log(e)
 			}
 		} else { 
-			throw new CustomError("Неправильный старый пароль", 400)
+			throw new BadRequestError("Неправильный старый пароль")
 		}
 	}
 
@@ -126,8 +126,16 @@ class UserController {
 			await ImageServices.deleteImage(user.image)
 		await UserServices.deleteUser(userId)
 		await CommentsServices.deleteUserComments(userId)
+		const articles = await NewsServices.getUsersArticles( userId )
+		for (const article of articles) {
+			await ImageServices.deleteImage(article.image) 
+		}
 		await NewsServices.deleteManyArticleByAuthor( userId )
 		await UserServices.endSession(req, resp)
+	}
+	
+	async logout (req, resp) {
+		UserServices.endSession(req, resp)
 	}
 
 	//  ------------------- GET REQUESTS -------------------
@@ -135,31 +143,33 @@ class UserController {
 	async getLoginPage(req, resp) { 
 		const isAuthorized = req.session.isAuthorized
 		if (!(isAuthorized)) {
-			resp.render("userspage/signin", {auth : isAuthorized})
+			resp.status(200).render("userspage/signin", {auth : isAuthorized})
 	    } else { 
-			throw new CustomError("Вы уже авторизованы", 403)	
+			throw new ForbiddenError("Вы уже авторизованы")	
 	    }
 	}
 	async getRegisterPage(req, resp) { 
 		const isAuthorized = req.session.isAuthorized
 
-		resp.render("userspage/signup",  {auth : isAuthorized})
+		resp.status(200).render("userspage/signup",  {auth : isAuthorized})
 	}
 
 	async getUsersPage(req, resp) { 
 		const isAuthorized = req.session.isAuthorized
 
 		if ( !(isAuthorized) )
-			return resp.redirect('/users/signin') 
+			throw new ForbiddenError("Авторизуйтесь для доступа к странице") 
 
 		const userId = req.session.user.user_id
-
+		let data = { auth: isAuthorized }
 		const userData = await UserServices.getUserById(userId)
-		let data = { 
-			auth: isAuthorized, 
-			imageSource: await ImageServices.getImage(userId, false) 
+		
+		try { 
+			data["imageSource"] = await ImageServices.getImage(userId, false) 
+		} catch (e) {
+			data["imageSource"] = null
 		}
-
+		
 		data["userData"] = userData
 
 		if (userData["articles"].length > 0)
@@ -167,7 +177,7 @@ class UserController {
 
 		userData["date"] = await NewsServices.getCorrectDate(userData["date"])
 
-		return resp.render("userspage/userCabinetPage", data )
+		return resp.status(200).render("userspage/userCabinetPage", data )
 
 	}
 
@@ -175,7 +185,7 @@ class UserController {
 		const isAuthorized = req.session.isAuthorized
 
 		if ( !(isAuthorized) )
-			return resp.redirect('/users/signin') 
+			throw new ForbiddenError("Авторизуйтесь для доступа к странице") 
 		
 		let userData = undefined
 		
@@ -190,7 +200,7 @@ class UserController {
 		data['userData'] = await UserServices.getUserById(userId)
 		data['imageSource'] = image
 
-		return resp.render("userspage/userUpdatePage", data )
+		return resp.status(200).render("userspage/userUpdatePage", data )
 
 	}
 
@@ -198,7 +208,7 @@ class UserController {
 		const isAuthorized = req.session.isAuthorized
 
 		if ( !(isAuthorized) )
-			return resp.redirect('/users/signin') 
+			throw new ForbiddenError("Авторизуйтесь для доступа к странице") 
 
 		const { newPassword } = req.body
 
@@ -208,14 +218,9 @@ class UserController {
 			userData: userData
 		}
 
-		return resp.render("userspage/changePasswordPage", data )
+		return resp.status(200).render("userspage/changePasswordPage", data )
 
 	}
-
-	async logout (req, resp) {
-		UserServices.endSession(req, resp)
-	}
-	
 }
 
 module.exports = new UserController()

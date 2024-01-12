@@ -1,17 +1,25 @@
 <html lang="en">
 <head>
 	<%- include("../partials/head.ejs") -%>
-	<title>Mainpage</title>
+	<title> Главная страница </title>
+	<link rel="stylesheet" href="/css/mainPage.css">
 </head>
-<body class="d-flex flex-column min-vh-100">
-	<%- include("../partials/header.ejs") -%>	
-	<div class="container">
-	<% if (auth) { %>
-		<h1 style="margin-top: 5px"> Hello <%= user.name %> </h1>
-	<% } else { %>
-		<h3>Mainpage </h3>
-	<% }%>  
-	</div>
-	<%- include("../partials/footer.ejs") -%>
+<body>
+	<%- include("../partials/header.ejs") -%>
+
+    <div class="container mt-5">
+    	<div class="custom-container mx-auto text-center">
+	        <h3>Возможности данного сайта:</h3>
+	        <br>
+	        <h5>Написание статей, комментариев</h5>
+	        <h5>Регистрация пользователей и авторизация</h5>
+	        <h5>Возможность редактировать, удалять пользователей и статьи</h5>
+    	</div>
+    	<br>
+        <h5>Сайт написан на Express</h5>
+        <h5>Базы данных: MongoDB, Redis</h5>
+        <h5>Запущено с помощью Docker Compose, Nginx на AWS Server</h5>
+    </div>
 </body>
+</html>
 </html>

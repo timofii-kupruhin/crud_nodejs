@@ -4,7 +4,7 @@ const mongoose = require("mongoose")
 const NewsServices = require("../services/newsServices.js")
 const UserServices = require("../services/userServices.js")
 const ImageServices = require("../services/imageServices.js")
-const { ErrorServices, CustomError } = require("../services/errorService.js")
+const { ErrorServices, NotFoundError, ForbiddenError } = require("../services/errorService.js")
 
 // models
 const UserModel = require("../models/usersModels.js")
@@ -12,7 +12,6 @@ const ArticleModel = require("../models/articleModels.js")
 
 class NewsController {
 	//  ------------------- POST REQUESTS -------------------
-		
 	async createArticle (req, resp) { 
 		const userId = req.session.user.user_id
 		// request data 
@@ -71,6 +70,7 @@ class NewsController {
 		NewsServices.updateArticle(articleId, data)
 		return resp.redirect('/users/')
 	}
+
 	async deleteArticle (req, resp) {
 		const articleId = req.params.id
 		const userId = req.session.user.user_id
@@ -91,9 +91,9 @@ class NewsController {
 		const isAuthorized = req.session.isAuthorized
 
 		if ( !(isAuthorized) )
-			return resp.redirect('/users/signin/') 
+			throw new ForbiddenError("Авторизуйтесь для доступа к странице")
 
-		return resp.render("newspage/articleCreationPage", {auth: isAuthorized})
+		return resp.status(200).render("newspage/articleCreationPage", {auth: isAuthorized})
 	}
 
 	async getArticlePage(req, resp) { 
@@ -119,9 +119,9 @@ class NewsController {
 		 	if (imageSource)
 				data["imageSource"] = imageSource
 
-			return resp.render("newsPage/articlePage", data)
+			return resp.status(200).render("newsPage/articlePage", data)
 		} else { 
-			throw new CustomError("Неверный адресс статьи ", 404)
+			throw new NotFoundError("Неверный адресс статьи ")
 		}
 	}
 	
@@ -137,14 +137,14 @@ class NewsController {
 		  auth: isAuthorized, 
 		  articles: articleAndImage,
 		};
-		return resp.render("newspage/articlesPage",  data )
+		return resp.status(200).render("newspage/articlesPage",  data )
 	}
 
 	async getUpdateArticlePage (req, resp) {
 		const isAuthorized = req.session.isAuthorized
 
 		if ( !(isAuthorized) )
-			return resp.redirect('/news/') 
+			throw new ForbiddenError("Авторизуйтесь для доступа к странице")			
 
 		const articleId = req.params.id
 		
@@ -159,7 +159,7 @@ class NewsController {
 			article: article
 		}
 
-		return resp.render("newspage/articleUpdatePage",  data )
+		return resp.status(200).render("newspage/articleUpdatePage",  data )
 
 	}
 }

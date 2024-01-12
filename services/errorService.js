@@ -7,17 +7,8 @@ class ErrorService {
 		let data = { text: message, code: statusCode}
 		return data
 	}
-  async httpError404 (req, res, next) {
+  async httpError (req, res, next) {
     next(new NotFoundError)
-  }
-  async httpError400 (req, res, next) {
-    next(new BadRequestError)
-  }
-  async httpError403 (req, res, next) {
-    next(new ForbiddenError)
-  }
-  async httpError500 (req, res, next) {
-    next(new ServerError)
   }
 }
 

@@ -1,18 +1,18 @@
-<nav class="navbar navbar-expand-lg bg-light">
+<nav class="navbar navbar-expand-lg bg-blue">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/" style="a { text-decoration:none; color:blue;}" >Home</a>
+    <a class="navbar-brand" href="/" style="a { text-decoration:none; color:blue;}" > Домой </a>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <% if (auth) { %>
-        <a class="nav-link" href="/users/">Your profile</a>
+        <a class="nav-link" href="/users/"> Профиль </a>
         <% } %>
         <% if (!auth) { %>
-        <a class="nav-link" href="/users/signin/">Sign in</a>
-        <a class="nav-link" href="/users/signup/">Sign up</a>
+        <a class="nav-link" href="/users/signin/"> Войти </a>
+        <a class="nav-link" href="/users/signup/"> Регистрация </a>
         <% } %> 
-        <a class="nav-link" href="/news/">News</a>
+        <a class="nav-link" href="/news/">Новости </a>
         <% if (auth) { %>
-        <a class="nav-link" href="/users/logout/">Logout</a>
+        <a class="nav-link" href="/users/logout/">Выход</a>
         <% } %>
       </div>
     </div>

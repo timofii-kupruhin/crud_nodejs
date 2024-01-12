@@ -7,10 +7,7 @@ const methodOverride = require("method-override")
 const path = require('path')
 
 // sessions 
-const { sessionConfig } = require('./helpers/sessions.js')
-
-// enviroment variables
-require('dotenv').config()
+const { sessionConfig } = require('./utils/sessions.js')
 
 // error handler 
 require("express-async-errors")
@@ -25,10 +22,10 @@ const usersRouter = require("./routes/users.js")
 const middleware  = require("./utils/middleware.js")
 
 const app = express()
-const PORT = process.env.PORT
 
 app.set("view engine", 'ejs')
 app.set("views", './views')
+app.set('trust proxy', 1)
 
 // static folder
 app.use(express.static(path.join(__dirname, 'public')))
@@ -48,25 +45,8 @@ app.use("/news", newsRouter)
 app.use("/users", usersRouter)
 app.use("/", mainRouter)
 
-app.use(ErrorService.httpError400)
-app.use(ErrorService.httpError403)
-app.use(ErrorService.httpError404)
-app.use(ErrorService.httpError500)
+app.use(ErrorService.httpError)
 
 app.use(middleware.errorHandler)
 
-async function main() {
-	try {
-		middleware.connectMongo()
-		console.log("Mongo connected!")
-
-		app.listen(PORT) 
-		console.log("Server has been started.. ")
-	} catch(err) { 
-		return console.log(err)
-	}
-}
-
-main()
-
-module.exports = {}
+module.exports = app

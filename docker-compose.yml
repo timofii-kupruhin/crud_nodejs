@@ -1,0 +1,32 @@
+version: "3"
+services:
+  crud-node-app:
+    restart: always
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    env_file:
+      - ./.env
+    depends_on: 
+      - mongo
+      - redis
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=meowmeow123
+    volumes:
+      - mongo-db:/data/mongodb
+  
+  redis: 
+    image: redis
+    restart: always
+
+volumes: 
+  mongo-db:
+    name: mongodb-data

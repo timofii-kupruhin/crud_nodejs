@@ -2,20 +2,7 @@
 <head>
 	<%- include("../head.ejs") -%>
 	<title><%= error.code %></title>
-	<style>
-	body {
-	  background-color: #f8f9fa;
-	}
-
-	.error-container {
-	  width: 700px;
-	  padding: 30px;
-	  background-color: #ffffff;
-	  border: 1px solid #dee2e6;
-	  border-radius: 10px;
-	  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	}
-	</style>
+	<link rel="stylesheet" href="/css/errorsTemplate.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
 	<%- include("../header.ejs") -%>
@@ -23,7 +10,7 @@
    <div class="container d-flex align-items-center justify-content-center">
     <div class="error-container text-center">
       <h1 class="display-4"> ERROR <%= error.code %> </h1>
-      <p class="lead">  Что-то пошло не так...</p>
+      <p class="lead">  Something went wrong...</p>
       <hr class="my-4">
       <p class="text-muted" style='font-size: 35px'><%= error.text %> </p>
     </div>

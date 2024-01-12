@@ -31,7 +31,7 @@ class UserServices {
 	async endSession (req, resp) { 
 		req.session.destroy((err) => {
 			if (err) console.log(err)
-			resp.redirect("/")
+			return resp.redirect("/")
 		})
 	}
 

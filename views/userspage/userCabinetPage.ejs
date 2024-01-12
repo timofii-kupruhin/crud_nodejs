@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 	<%- include("../partials/head.ejs") -%>
-	<title>Users</title>
+	<title><%= userData.name %></title>
 	<link rel="stylesheet" href="/css/userCabinet.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -24,7 +24,7 @@
               <p class="h6"> Пока нету </p>
             <% } else { %>
               <% userData.articles.forEach((article) => { %>
-                <p class='h3'><%= article.title %>  <button type='button' class="btn btn-primary mt-3 md-3" id='article-link'><a href="/news/<%= article._id %>"> Перейти </a></button></p>
+                <p class='h3'><a href="/news/<%= article._id %>"> <%= article.title %> </a></p>
               <% }) %>
             <% } %>
           </div>

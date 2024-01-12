@@ -68,7 +68,7 @@ class NewsServices {
 		const deletedArticle = await ArticleModel.deleteOne({ _id: articleId});
 		return deletedArticle
 	}
-	
+
 	async deleteManyArticleByAuthor (userId) { 
 		const deletedArticles = await ArticleModel.deleteMany({ authorId: `${userId}`})
 		return deletedArticles
