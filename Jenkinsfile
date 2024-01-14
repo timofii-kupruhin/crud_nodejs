@@ -4,11 +4,10 @@ pipeline {
 		stage ("docker checkout") {
 			steps {
 				sh '''
-					sudo su
-					docker version 
-					docker info
-					docker-compose version
-					curl --version 
+					sudo docker version 
+					sudo docker info
+					sudo docker-compose version
+					sudo curl --version 
 				'''
 			}
 		}
