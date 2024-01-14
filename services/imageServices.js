@@ -28,8 +28,11 @@ class ImageServices {
 			return null
 		
 		gfs.collection("photos")
-	
 	    const image = await gfs.files.findOne({ _id: data.image} )
+	    if (image == null) {
+	    	return null
+	    }
+
 		const stream = await bucket.openDownloadStream(data.image)
 
 		return new Promise((resolve, reject) => {
@@ -46,9 +49,11 @@ class ImageServices {
 	async deleteImage (imageSource) {
 		const connection = mongoose.connection
 		const bucket = new mongoose.mongo.GridFSBucket(connection, { bucketName: 'photos' });
-
-		bucket.delete(imageSource)
-
+		try { 
+			bucket.delete(imageSource)
+		} catch (e) {
+			return 
+		}
 	}
 
 }

@@ -13,6 +13,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
+   await mongoose.connection.collection('usermodels').deleteOne( {email: "ef386e10db4e43058a06deb1528970ae@gmail.com"} )
    await teardown()
 })
 
@@ -35,7 +36,7 @@ describe("POST REQUEST /users/", () => {
 		name: "test", 
 		surname: "test", 
 		password: "12345", 
-		email: "test123@gmail.com",
+		email: "ef386e10db4e43058a06deb1528970ae@gmail.com",
 	}
 	
 	const response = await request(app)
@@ -47,15 +48,8 @@ describe("POST REQUEST /users/", () => {
 	})
 
 	test("POST /users/signin should return 200 ", async () => {
-		const testUser = {
-		    password: await bcrypt.hash("12345", 10),
-		    email: 'test@gmail.com',
-		}
-
-	    await mongoose.connection.collection('usermodels').insertOne(testUser)
-
 		const response = await agent.post('/users/signin').send({
-		    email: 'test@gmail.com',
+		    email: 'ef386e10db4e43058a06deb1528970ae@gmail.com',
 		    password: '12345',
 		})
 	})

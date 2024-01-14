@@ -1,7 +1,7 @@
 .links { margin-left: 10px; font-size: 20px; }
 .links a { text-decoration : none; margin: 5px;}
-.articles-wrapper a {text-decoration : none; color: white;}
-.articles-wrapper a:hover{ color: white;}
+.articles-wrapper a {text-decoration : none; color: blue;}
+.articles-wrapper a:hover{ color: blue;}
 #content { margin-left:0px;  font-size: 35px}
 body {
 background-color: #f8f9fa;

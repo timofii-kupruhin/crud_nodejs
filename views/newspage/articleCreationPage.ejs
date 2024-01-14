@@ -5,20 +5,17 @@
 	<script src="/js/imagePreview.js"></script>
 	<style> form {margin: 50px;} </style>
 </head>
-<body>	
+<body>
 	<%- include("../partials/header.ejs") -%>
 	<div class="container mb-1" style='max-width: 800px'>
 		<div class="container mb-5">
-		
 			<p id='titleForm' class='mt-5 h3'> Создайте свою статью </p>
-			
 			<form method="POST" id="uploadForm" enctype="multipart/form-data">
 			    <div class="form-group">
-		      	  <img src="\images\blank.png" class="card-img-top mb-2" id="articleImage" height='500'> 
+		      	  <img src="\images\blank.png" class="card-img-top mb-2" id="imageField" height='500'>
 			      <div class="input-group mb-3">
-					  <input type="file" class="form-control" id="inputGroupFile01" onchange="previewFile()" name="image" required accept="image/*">
-					</div>
-
+					<input type="file" class="form-control" id="inputGroupFile01" onchange="previewFile()" name="image" required accept="image/*">
+				  </div>
 				  <label for="exampleFormControlInput1" class="form-label"> Заголовок </label>
 				  <input type="text" class="form-control" id="exampleFormControlInput1" required name='title'>
 				<div class="mb-3">
@@ -26,8 +23,8 @@
 				  <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" required name='text' style='resize: none;'></textarea>
 				</div>
 				<button type="submit" class="btn btn-primary btn-lg"> Опубликовать </button>
+				</div>
 			</form>
-			    </div>
 			
 		</div>
 	</div>

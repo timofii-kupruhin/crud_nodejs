@@ -50,20 +50,20 @@ class NewsController {
 	async updateArticle (req, resp) {
 		const articleId = req.params.id
 
-		const article = NewsServices.getOneArticle(articleId)
+		const article = await NewsServices.getOneArticle(articleId)
 
 		// request data 
 		const { title, text, date } = req.body
 		const image = req.file
 
-		let data = {
+		const data = {
 			title: title,
 			text: text,
 			date: date
 		}
 		if ( image ) {
 			if (article.image != null)
-				ImageServices.deleteImage(article.image)
+				await ImageServices.deleteImage(article.image)
 			data['image'] = image.id
 		}
 
@@ -116,8 +116,11 @@ class NewsController {
 			if (articleData["comments"])
 				data["comments"] = await NewsServices.getCommentsData(articleData["comments"])
 		 	
-		 	if (imageSource)
+		 	if (imageSource) {
 				data["imageSource"] = imageSource
+		 	} else {
+		 		data["imageSource"] = null 
+		 	}
 
 			return resp.status(200).render("newsPage/articlePage", data)
 		} else { 
@@ -152,7 +155,13 @@ class NewsController {
 		const correctDate = await NewsServices.getCorrectDate(article["date"])
 
 		article["date"] = correctDate
-		article["imageSource"] = await ImageServices.getImage(articleId, true )
+		const image = await ImageServices.getImage(articleId, true )
+
+		if (image != null ) {
+			article["imageSource"] = image
+		} else {
+			article["imageSource"] = null
+		}
 
 		const data = { 
 			auth: isAuthorized, 

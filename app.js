@@ -9,7 +9,7 @@ const path = require('path')
 // sessions 
 const { sessionConfig } = require('./utils/sessions.js')
 
-// error handler 
+// error handler
 require("express-async-errors")
 const { ErrorService } = require('./services/errorService.js')
 

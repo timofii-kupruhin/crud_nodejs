@@ -13,7 +13,7 @@
 	  <div class="row" id='rowDiv'>
 		<% articles.forEach((article) => { %>	
 	    <div class="card col-md-2">
-	      <img src="<%= article[1] %>" class="card-img-top" width="400" height='300'>
+	      <img src="<%= article[1] %>"  onerror="this.src='..\\images\\notfound.jpg' " class="card-img-top" width="400" height='300'>
   
 	      <div class="card-body">
 	        <h5 class="card-title"><%= article[0].title %></h5>

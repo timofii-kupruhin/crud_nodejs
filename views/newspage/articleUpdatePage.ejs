@@ -16,7 +16,7 @@
 	  <div class="form-container">
 	    <h2>Форма редактирования статьи</h2>
 	    <form id="editArticleForm" method="POST" enctype="multipart/form-data">
-	      <img src="<%= article.imageSource %>" class="card-img-top mb-2" id="imageField" width='400' height='400'>
+	      <img src="<%= article.imageSource %>" onerror="this.src='..\\images\\notfound.jpg'" class="card-img-top mb-2" id="imageField" width='400' height='400'>
 
     	  <div class="custom-file mb-2">
             <div class="input-group mb-3">
