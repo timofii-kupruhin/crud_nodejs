@@ -1,9 +1,8 @@
 FROM node
 WORKDIR /app
-COPY package.json .
 
-RUN apt-get update && \
-    apt-get install -y libssl-dev
+COPY package.json .
+COPY .env /app/.env
 
 RUN npm install
 RUN npm uninstall bcrypt --save
