@@ -1,0 +1,21 @@
+version: "3"
+services:
+  nginx: 
+    image: nginx:stable-alpine
+    ports: 
+      - 80:80
+  
+  crud-node-app:
+    build: 
+      context: .
+    args: 
+      NODE_ENV: production
+    
+    volumes:
+      - ./:/app
+      - /app/node_modules
+      
+    environment:
+      - NODE_ENV=production
+
+    command: npm run start

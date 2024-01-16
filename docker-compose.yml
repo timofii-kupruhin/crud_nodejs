@@ -25,11 +25,14 @@ services:
     image: mongo
     restart: always
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=meowmeow123
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ADMIN}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
     volumes:
       - mongo-db:/data/mongodb
-  
+    
+    env_file:
+      - ./.env
+
   redis: 
     image: redis
     restart: always
