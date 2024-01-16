@@ -1,6 +1,12 @@
 pipeline {
 	agent any
 	stages {
+		stage('scm checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
 		stage ("docker checkout") {
 			steps {
 				sh '''
@@ -14,17 +20,23 @@ pipeline {
 		stage ("prune docker containers and volumes") {
 			steps {
 				sh '''
-					sudo docker system prune
+					sudo docker system prune -a
+					sudo docker ps -a
+
 					sudo docker volume prune
 					sudo docker volume ls
-					sudo docker ps -a
+
+					sudo docker image prune
+					sudo docker images
+
 				'''
 			}
 		}
 
 		stage ("start container") {
 			steps {
-				sh 'docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build'
+				sh 'cp /home/ubuntu/.env .'
+				sh 'docker-compose --env-file .env -f docker-compose.yml -f docker-compose.prod.yml up -d --build'
 				sh 'docker ps -a'
 			}
 		}
