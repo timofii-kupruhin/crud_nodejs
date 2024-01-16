@@ -35,7 +35,7 @@ pipeline {
 
 		stage ("start container") {
 			steps {
-				sh 'cp /home/ubuntu/.env .'
+				sh 'sudo cp /home/ubuntu/.env .'
 				sh 'docker-compose --env-file .env -f docker-compose.yml -f docker-compose.prod.yml up -d --build'
 				sh 'docker ps -a'
 			}
