@@ -5,12 +5,7 @@ services:
     ports: 
       - 80:80
   
-  crud-node-app:
-    build: 
-      context: .
-    args: 
-      NODE_ENV: production
-    
+  crud-node-app: 
     volumes:
       - ./:/app
       - /app/node_modules
