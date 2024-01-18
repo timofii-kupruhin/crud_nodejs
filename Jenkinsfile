@@ -20,12 +20,7 @@ pipeline {
 		stage ("prune docker containers and volumes") {
 			steps {
 				sh '''
-					sudo docker rm -f $(docker ps -aq)
-					sudo docker rmi -f $(docker images -aq)
-					sudo docker volume rm $(docker volume ls -q)
-					sudo docker ps -a
-					sudo docker volume ls
-					sudo docker images
+					sudo docker system prune -a --volumes
 				'''
 			}
 		}
