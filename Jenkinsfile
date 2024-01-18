@@ -20,6 +20,7 @@ pipeline {
 		stage ("prune docker containers and volumes") {
 			steps {
 				sh '''
+    					sudo docker stop $(sudo docker ps -a -q)
 					sudo docker system prune -a --volumes
 					sudo docker image prune -f
 				'''
