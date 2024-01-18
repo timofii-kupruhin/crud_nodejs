@@ -21,6 +21,7 @@ pipeline {
 			steps {
 				sh '''
 					sudo docker system prune -a --volumes
+					sudo docker image prune
 				'''
 			}
 		}
