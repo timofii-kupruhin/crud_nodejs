@@ -14,7 +14,7 @@ services:
       - ./:/app
       - /app/node_modules
     container_name: crud-node-app
-    host_name: crud-node-app
+
     env_file:
       - ./.env
     
