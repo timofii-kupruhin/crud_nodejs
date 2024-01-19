@@ -9,8 +9,6 @@ services:
 
   crud-node-app:
     restart: always
-    ports: 
-      - ${PORT}:${PORT}
     build: .
     volumes:
       - ./:/app
