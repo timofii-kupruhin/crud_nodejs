@@ -12,5 +12,11 @@ server {
         
         proxy_pass http://crud-node-app:4000/;
 
+<<<<<<< HEAD
+        proxy_redirect off;
+=======
+>>>>>>> 258ca28bfacc1f7810aaecf079d2df9725250f69
+        proxy_send_timeout 150s;
+        proxy_read_timeout 150s;
     }
 }

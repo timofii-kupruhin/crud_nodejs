@@ -1,5 +1,6 @@
 services:
   nginx: 
+    restart: always
     image: nginx:stable-alpine
     ports: 
       - ${PORT}:80
