@@ -4,6 +4,7 @@ services:
     image: nginx:stable-alpine
     ports: 
       - 80:80
+      
   crud-node-app: 
     environment:
       - NODE_ENV=production
