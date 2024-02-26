@@ -19,6 +19,12 @@ pipeline {
 		}
 		stage ("prune docker containers and volumes") {
 			steps {
+				script {
+                    def containers = sh(script: "sudo docker ps -a -q", returnStdout: true).trim()
+                    if (containers) {
+                        sh "sudo docker stop $containers"
+                    }
+                }
 				sh '''
     				sudo docker stop $(sudo docker ps -a -q)
 					sudo docker system prune -a --volumes

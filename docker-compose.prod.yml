@@ -3,7 +3,7 @@ services:
   nginx: 
     image: nginx:stable-alpine
     ports: 
-      - 80:80
+      - "80:80"
       
   crud-node-app: 
     environment:
